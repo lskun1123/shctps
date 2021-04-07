@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <script src="/shctps/js/jquery-1.11.2.js"></script>
+    <style>
+        .goodsImg{
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    主页
+
+    <br />
+    发布商品
+    <form action="/shctps/goods/releaseDo" method="post" enctype="multipart/form-data">
+        <input name="goodsName" type="text" placeholder="商品名称"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsImg" type="file" multiple="multiple"/><br>
+        <input name="goodsPrice" type="text" placeholder="商品价格"/><br>
+
+        <textarea name="goodsDesc" placeholder="描述你的商品" ></textarea><br>
+
+        <select name="category" id="category">
+        </select>
+        <br>
+        <input type="submit" value="上架" />
+    </form>
+
+    <hr/>
+    <a href="/shctps/user/mine.html">个人中心</a>
+    <hr/>
+    展示商品
+    <br/>
+    <p id="pageNumber" style="display: none">1</p>
+    <span onclick="prePage()">上一页</span>&nbsp;&nbsp;<span onclick="afterPage()">下一页</span>
+    <div style="width: 100%;height: 1000px;" id="goodsList" >
+
+    </div>
+
+</body>
+<script src="/shctps/js/mian.js"></script>
+<!--<script>-->
+<!--    //获取商品类别-->
+<!--    getCategory();-->
+<!--    function getCategory() {-->
+
+<!--        $.getJSON("/shctps/goods/getCategory",function (data) {-->
+<!--            var category = $("#category");-->
+<!--            category.empty();-->
+<!--            $.each(data.data,function (index,data) {-->
+<!--                var option = $("<option></option>");-->
+<!--                option.val(data.gcid);-->
+<!--                option.text(data.categoryname);-->
+<!--                category.append(option);-->
+<!--            })-->
+<!--        })-->
+<!--    }-->
+
+
+<!--    getGoodsList();-->
+<!--    function getGoodsList() {-->
+<!--        var number = $("#pageNumber").text();-->
+<!--        console.log(number);-->
+<!--        $.getJSON("/shctps/goods/getGoodsList",{-->
+<!--            "pageNumber":number-->
+<!--        },function (data){-->
+<!--            var goodsList = $("#goodsList");-->
+<!--            goodsList.empty();-->
+<!--            $.each(data.data,function (index,data) {-->
+<!--                var div = $("<div name='" + data.gid + " onclick='toDetail(this)' '></div>");-->
+
+<!--                var name = $("<p></p>");-->
+<!--                name.text(data.goodsname);-->
+<!--                console.log(data);-->
+<!--                var imgstring = data.goodsimg;-->
+<!--                var images = imgstring.split(",")-->
+<!--                var img = '<img class="goodsImg" src="https://shctps-1304936287.cos.ap-chengdu.myqcloud.com/goodsImg/' + images[0] + '" />';-->
+
+<!--                var price = $("<p></p>");-->
+<!--                price.text(data.goodsprice);-->
+
+<!--                div.append(name);-->
+<!--                div.append(img);-->
+<!--                div.append(price);-->
+<!--                goodsList.append(div);-->
+<!--                goodsList.append("<br/>");-->
+<!--            })-->
+<!--        })-->
+<!--    }-->
+<!--    //上一页，下一页-->
+<!--    function prePage() {-->
+<!--        var number = $("#pageNumber");-->
+<!--        if(number.text() != 1){-->
+<!--            var num = number.text();-->
+<!--            num&#45;&#45;;-->
+<!--            number.empty();-->
+<!--            number.text(num);-->
+<!--        }-->
+<!--        getGoodsList();-->
+<!--    }-->
+<!--    function afterPage() {-->
+<!--        var number = $("#pageNumber");-->
+<!--        var num = number.text();-->
+<!--        num++;-->
+<!--        number.empty();-->
+<!--        number.text(num);-->
+<!--        getGoodsList();-->
+<!--    }-->
+<!--    //跳转到商品详情界面-->
+<!--    function toDetail(this) {-->
+<!--        //let event=e||window.event-->
+<!--        cons-->
+<!--        var id = $(this).attr("id");-->
+<!--        //var id = event.attr('id');-->
+<!--        console.log(this," 111111111");-->
+<!--        //location.href("shctps/goods/goodsInfo&gid=" + id);-->
+<!--    }-->
+<!--</script>-->
+</html>

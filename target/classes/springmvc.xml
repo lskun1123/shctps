@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="com.lsk"/>
+
+
+
+    <!--开启mvc的注解  配置类型转换器-->
+    <mvc:annotation-driven >
+        <mvc:message-converters register-defaults="true">
+            <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!--定义视图解析-->
+    <!-- 页面View层基本信息设定 -->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 如果使用jstl的话，配置下面的属性 <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"
+            /> -->
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <!-- 前缀 -->
+        <property name="prefix" value="/WEB-INF/view/" />
+        <!-- 后缀 -->
+        <property name="suffix" value=".html" />
+    </bean>
+
+
+    <!--文件上传的配置-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="-1"/>
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="maxInMemorySize" value="1024"/>
+        <property name="uploadTempDir" value="/img/goodsImg/"/>
+    </bean>
+    <mvc:default-servlet-handler/>
+    <!--异常处理配置-->
+    <!--<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        &lt;!&ndash;默认异常处理页面&ndash;&gt;
+        <property name="defaultErrorView" value="error/error"/>
+        &lt;!&ndash;特殊异常处理&ndash;&gt;
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.NullPointerException">error/nullpoint</prop>
+            </props>
+        </property>
+        </bean>-->
+        </beans>

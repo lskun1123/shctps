@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsk.dao.ChatHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.lsk.entity.ChatHistory">
+    <id column="cid" jdbcType="BIGINT" property="cid" />
+    <result column="sayer" jdbcType="INTEGER" property="sayer" />
+    <result column="accepter" jdbcType="INTEGER" property="accepter" />
+    <result column="chatcontent" jdbcType="VARCHAR" property="chatcontent" />
+    <result column="chattime" jdbcType="DATE" property="chattime" />
+    <result column="tag" jdbcType="TINYINT" property="tag" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    cid, sayer, accepter, chatcontent, chattime, tag
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from chathistory
+    where cid = #{cid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from chathistory
+    where cid = #{cid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lsk.entity.ChatHistory">
+    insert into chathistory (cid, sayer, accepter, 
+      chatcontent, chattime, tag
+      )
+    values (#{cid,jdbcType=BIGINT}, #{sayer,jdbcType=INTEGER}, #{accepter,jdbcType=INTEGER}, 
+      #{chatcontent,jdbcType=VARCHAR}, #{chattime,jdbcType=DATE}, #{tag,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lsk.entity.ChatHistory">
+    insert into chathistory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="sayer != null">
+        sayer,
+      </if>
+      <if test="accepter != null">
+        accepter,
+      </if>
+      <if test="chatcontent != null">
+        chatcontent,
+      </if>
+      <if test="chattime != null">
+        chattime,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cid != null">
+        #{cid,jdbcType=BIGINT},
+      </if>
+      <if test="sayer != null">
+        #{sayer,jdbcType=INTEGER},
+      </if>
+      <if test="accepter != null">
+        #{accepter,jdbcType=INTEGER},
+      </if>
+      <if test="chatcontent != null">
+        #{chatcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="chattime != null">
+        #{chattime,jdbcType=DATE},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lsk.entity.ChatHistory">
+    update chathistory
+    <set>
+      <if test="sayer != null">
+        sayer = #{sayer,jdbcType=INTEGER},
+      </if>
+      <if test="accepter != null">
+        accepter = #{accepter,jdbcType=INTEGER},
+      </if>
+      <if test="chatcontent != null">
+        chatcontent = #{chatcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="chattime != null">
+        chattime = #{chattime,jdbcType=DATE},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=TINYINT},
+      </if>
+    </set>
+    where cid = #{cid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lsk.entity.ChatHistory">
+    update chathistory
+    set sayer = #{sayer,jdbcType=INTEGER},
+      accepter = #{accepter,jdbcType=INTEGER},
+      chatcontent = #{chatcontent,jdbcType=VARCHAR},
+      chattime = #{chattime,jdbcType=DATE},
+      tag = #{tag,jdbcType=TINYINT}
+    where cid = #{cid,jdbcType=BIGINT}
+  </update>
+</mapper>

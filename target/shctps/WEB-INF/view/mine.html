@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <script src="/shctps/js/jquery-1.11.2.js"></script>
+</head>
+<body>
+    <div style="width: 500px;border:1px solid #000000;" id="userInfo">
+
+    </div>
+    <a href="/shctps/user/editUser.html">编辑个人信息</a>
+</body>
+<script>
+    getUserInfo();
+    //获取个人信息
+    function getUserInfo() {
+        $.getJSON("/shctps/user/mineDo",function (data) {
+            var userInfo = $("#userInfo");
+            userInfo.empty();
+            console.log(data);
+            //console.log("data.data " + data.data);
+            var snumber = $("<p></p>");
+            snumber.text(data.data.snumber);
+            var nickname = $("<p></p>");
+            if(data.data.nickname == null){
+                nickname.text("无昵称");
+            }else{
+                nickname.text(data.data.nickname);
+            }
+            var img = '<img src="https://shctps-1304936287.cos.ap-chengdu.myqcloud.com/headImg/' + data.data.img + '"/>';
+            var contact = $("<p></p>");
+            if(data.data.contact == null){
+                contact.text("暂无联系方式，请添加");
+            }else{
+                contact.text(data.data.contact);
+            }
+            userInfo.append(snumber);
+            userInfo.append("<br/>");
+            userInfo.append(nickname);
+            userInfo.append("<br/>");
+            userInfo.append(img);
+            userInfo.append("<br/>");
+            userInfo.append(contact);
+            userInfo.append("<br/>");
+        })
+    }
+</script>
+</html>

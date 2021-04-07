@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情</title>
+    <script src="/shctps/js/jquery-1.11.2.js"></script>
+    <style>
+        .goodsImg{
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="goodsInfo"></div>
+
+</body>
+<script>
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return unescape(r[2]); return null;
+    }
+
+    getGoodsInfo();
+    function getGoodsInfo(){
+        var goodsInfo = $("#goodsInfo");
+        var gid = GetQueryString("gid");
+        console.log("gid: " + gid);
+        $.getJSON("/shctps/goods/getGoodsInfo",{
+            "gid":gid
+        },function (data) {
+            //console.log(data);
+            if(data.code == 1){
+                console.log(data.data);
+                data = data.data;
+                var goodsName = $("<p></p>");
+                goodsName.text("商品名称： " + data.goodsname);
+                goodsInfo.append(goodsName);
+                goodsInfo.append("<br/>")
+                var imageString = data.goodsimg;
+                var images = imageString.split(",");
+                var i = 0;
+                while(images[i] != null){
+                    var img = '<img class="goodsImg" src="https://shctps-1304936287.cos.ap-chengdu.myqcloud.com/goodsImg/' + images[i] + '" />';
+                    goodsInfo.append(img);
+                    i++;
+                }
+                goodsInfo.append("<br/>");
+                var price = $("<p></p>")
+                price.text("商品价格： " + data.goodsprice);
+                var goodsDesc = $("<p></p>");
+                goodsDesc.text(data.goodsdesc);
+                goodsInfo.append(goodsDesc);
+                getUser(data.pid);
+                var issuedate = $("<p></p>");
+                issuedate.text("发布于： " + data.issuedate);
+                goodsInfo.append(issuedate);
+            }
+        })
+    }
+
+    function getUser(pid) {
+        var goodsInfo = $("#goodsInfo");
+        $.getJSON("/shctps/user/mineDo",{
+            "pid":pid
+        },function (msg) {
+            console.log("发布者信息：" + msg.data);
+            var username = $("<p></p>");
+            username.append("发布人： " + msg.data.nickname);
+            goodsInfo.append(username);
+        });
+    }
+
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return unescape(r[2]); return null;
+    }
+</script>
+</html>

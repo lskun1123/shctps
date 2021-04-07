@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsk.dao.ReviewMapper">
+  <resultMap id="BaseResultMap" type="com.lsk.entity.Review">
+    <id column="rid" jdbcType="INTEGER" property="rid" />
+    <result column="reviewer" jdbcType="INTEGER" property="reviewer" />
+    <result column="viewobject" jdbcType="TINYINT" property="viewobject" />
+    <result column="objectid" jdbcType="INTEGER" property="objectid" />
+    <result column="reviewcontent" jdbcType="VARCHAR" property="reviewcontent" />
+    <result column="reviewtime" jdbcType="DATE" property="reviewtime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    rid, reviewer, viewobject, objectid, reviewcontent, reviewtime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from review
+    where rid = #{rid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from review
+    where rid = #{rid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lsk.entity.Review">
+    insert into review (rid, reviewer, viewobject, 
+      objectid, reviewcontent, reviewtime
+      )
+    values (#{rid,jdbcType=INTEGER}, #{reviewer,jdbcType=INTEGER}, #{viewobject,jdbcType=TINYINT}, 
+      #{objectid,jdbcType=INTEGER}, #{reviewcontent,jdbcType=VARCHAR}, #{reviewtime,jdbcType=DATE}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lsk.entity.Review">
+    insert into review
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        rid,
+      </if>
+      <if test="reviewer != null">
+        reviewer,
+      </if>
+      <if test="viewobject != null">
+        viewobject,
+      </if>
+      <if test="objectid != null">
+        objectid,
+      </if>
+      <if test="reviewcontent != null">
+        reviewcontent,
+      </if>
+      <if test="reviewtime != null">
+        reviewtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        #{rid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewer != null">
+        #{reviewer,jdbcType=INTEGER},
+      </if>
+      <if test="viewobject != null">
+        #{viewobject,jdbcType=TINYINT},
+      </if>
+      <if test="objectid != null">
+        #{objectid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewcontent != null">
+        #{reviewcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewtime != null">
+        #{reviewtime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lsk.entity.Review">
+    update review
+    <set>
+      <if test="reviewer != null">
+        reviewer = #{reviewer,jdbcType=INTEGER},
+      </if>
+      <if test="viewobject != null">
+        viewobject = #{viewobject,jdbcType=TINYINT},
+      </if>
+      <if test="objectid != null">
+        objectid = #{objectid,jdbcType=INTEGER},
+      </if>
+      <if test="reviewcontent != null">
+        reviewcontent = #{reviewcontent,jdbcType=VARCHAR},
+      </if>
+      <if test="reviewtime != null">
+        reviewtime = #{reviewtime,jdbcType=DATE},
+      </if>
+    </set>
+    where rid = #{rid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lsk.entity.Review">
+    update review
+    set reviewer = #{reviewer,jdbcType=INTEGER},
+      viewobject = #{viewobject,jdbcType=TINYINT},
+      objectid = #{objectid,jdbcType=INTEGER},
+      reviewcontent = #{reviewcontent,jdbcType=VARCHAR},
+      reviewtime = #{reviewtime,jdbcType=DATE}
+    where rid = #{rid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑用户</title>
+    <script src="/shctps/js/jquery-1.11.2.js"></script>
+</head>
+<body>
+<form style="width: 500px;border:1px solid #000000;" id="userInfo" method="post" action="/shctps/user/editUserDo" enctype="multipart/form-data">
+
+</form>
+</body>
+<script>
+    getUserInfo();
+    //获取个人信息
+    function getUserInfo() {
+        $.getJSON("/shctps/user/mineDo",function (data) {
+            var userInfo = $("#userInfo");
+            userInfo.empty();
+            console.log(data);
+            //console.log("data.data " + data.data);
+            var snumber = $("<p></p>");
+            snumber.text(data.data.snumber);
+            var nickname = $("<input name='nickname' type='text'/>");
+            if(data.data.nickname == null){
+                nickname.text("无昵称");
+            }else{
+                nickname.text(data.data.nickname);
+            }
+            var newImg = $("<input name='img' type='file'/>");
+            var img = '<img src="https://shctps-1304936287.cos.ap-chengdu.myqcloud.com/headImg/' + data.data.img + '"/>';
+            var contact = $("<textarea name='contact'/>");
+            if(data.data.contact == null){
+                contact.text("暂无联系方式，请添加");
+            }else{
+                contact.text(data.data.contact);
+            }
+            userInfo.append(snumber);
+            userInfo.append("<br/>");
+            userInfo.append(nickname);
+            userInfo.append("<br/>");
+            userInfo.append(newImg);
+            userInfo.append("<br/>");
+            userInfo.append(img);
+            userInfo.append("<br/>");
+            userInfo.append(contact);
+            userInfo.append("<br/>");
+            userInfo.append('<input type="submit" value="提交" />');
+        })
+    }
+</script>
+</html>
