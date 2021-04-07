@@ -21,4 +21,6 @@ public interface GoodsService {
     List<Goods> getAbstractGoodsInfo(String pageNumber);
 
     Goods getGoodsInfo(String gid);
+
+    List<Goods> getReleaseHistory(Integer uid, String pageNumber);
 }

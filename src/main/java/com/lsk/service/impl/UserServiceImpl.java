@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User selectUser(String snumber) {
-        return userMapper.selectBySnumber(snumber);
+    public User selectUserByOpenID(String openID) {
+        return userMapper.selectByOpenID(openID);
     }
 
     /**

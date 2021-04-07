@@ -3,7 +3,7 @@
 <mapper namespace="com.lsk.dao.UserMapper">
   <resultMap id="BaseResultMap" type="com.lsk.entity.User">
     <id column="uid" jdbcType="INTEGER" property="uid" />
-    <result column="snumber" jdbcType="CHAR" property="snumber" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
     <result column="img" jdbcType="VARCHAR" property="img" />
     <result column="contact" jdbcType="VARCHAR" property="contact" />
@@ -38,7 +38,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    uid, snumber, nickname, img, contact
+    uid, openid, nickname, img, contact
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -46,19 +46,20 @@
     from user
     where uid = #{uid,jdbcType=INTEGER}
   </select>
-  <select id="selectBySnumber" resultType="com.lsk.entity.User" parameterType="java.lang.String">
+  <select id="selectByOpenID" resultType="com.lsk.entity.User" parameterType="java.lang.String">
     select
     <include refid="Base_Column_List"></include>
-    from user where snumber = #{snumber}
+    from user
+    where openid = #{openID}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user
     where uid = #{uid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lsk.entity.User">
-    insert into user (uid, snumber, nickname, 
+    insert into user (uid, openid, nickname, 
       img, contact)
-    values (#{uid,jdbcType=INTEGER}, #{snumber,jdbcType=CHAR}, #{nickname,jdbcType=VARCHAR}, 
+    values (#{uid,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
       #{img,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lsk.entity.User">
@@ -67,8 +68,8 @@
       <if test="uid != null">
         uid,
       </if>
-      <if test="snumber != null">
-        snumber,
+      <if test="openid != null">
+        openid,
       </if>
       <if test="nickname != null">
         nickname,
@@ -84,8 +85,8 @@
       <if test="uid != null">
         #{uid,jdbcType=INTEGER},
       </if>
-      <if test="snumber != null">
-        #{snumber,jdbcType=CHAR},
+      <if test="openid != null">
+        #{openid,jdbcType=VARCHAR},
       </if>
       <if test="nickname != null">
         #{nickname,jdbcType=VARCHAR},
@@ -101,8 +102,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lsk.entity.User">
     update user
     <set>
-      <if test="snumber != null">
-        snumber = #{snumber,jdbcType=CHAR},
+      <if test="openid != null">
+        openid = #{openid,jdbcType=VARCHAR},
       </if>
       <if test="nickname != null">
         nickname = #{nickname,jdbcType=VARCHAR},
@@ -118,7 +119,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lsk.entity.User">
     update user
-    set snumber = #{snumber,jdbcType=CHAR},
+    set openid = #{openid,jdbcType=VARCHAR},
       nickname = #{nickname,jdbcType=VARCHAR},
       img = #{img,jdbcType=VARCHAR},
       contact = #{contact,jdbcType=VARCHAR}

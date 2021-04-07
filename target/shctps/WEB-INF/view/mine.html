@@ -4,12 +4,24 @@
     <meta charset="UTF-8">
     <title>个人中心</title>
     <script src="/shctps/js/jquery-1.11.2.js"></script>
+    <style>
+        .goodsImg{
+            width: 300px;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
     <div style="width: 500px;border:1px solid #000000;" id="userInfo">
 
     </div>
     <a href="/shctps/user/editUser.html">编辑个人信息</a>
+    <div id="releaseHistory">
+
+    </div>
+    <p id="pageNumber" style="display: none">1</p>
+    <span onclick="prePage()">上一页</span>&nbsp;&nbsp;<span onclick="afterPage()">下一页</span>
+
 </body>
 <script>
     getUserInfo();
@@ -44,6 +56,76 @@
             userInfo.append(contact);
             userInfo.append("<br/>");
         })
+    }
+
+    getReleaseHistory(1);
+    //获取发布历史
+    function getReleaseHistory(pageNumber) {
+        var releaseHistory = $("#releaseHistory");
+        releaseHistory.empty();
+        $.getJSON("/shctps/goods/getReleaseHistory",{
+            "pageNumber":pageNumber
+        },function (data) {
+            console.log(data);
+            $.each(data.data,function (index,data) {
+                var div = $("<a name='" + data.gid + "style='display: block;' href='../goods/goodsInfo.html?gid=" + data.gid + "'></a>");
+
+                var name = $("<p></p>");
+                name.text(data.goodsname);
+                console.log(data);
+                var imgstring = data.goodsimg;
+                var images = imgstring.split(",")
+                var img = '<img class="goodsImg" src="https://shctps-1304936287.cos.ap-chengdu.myqcloud.com/goodsImg/' + images[0] + '" />';
+
+                var price = $("<p></p>");
+                price.text(data.goodsprice);
+
+                var state = $("<p></p>");
+                var stateString = data.state;
+                if(stateString == 0){
+                    stateString = "待审核";
+                }else if(stateString == 1){
+                    stateString = "上架中";
+                }else if(stateString == 2){
+                    stateString = "已出售";
+                }else if(stateString == 3){
+                    stateString = "已下架";
+                }else {
+                    stateString = "审核未通过";
+                }
+                state.text("状态：" + stateString);
+                var issuedate = $("<p></p>");
+                issuedate.text(data.issuedate);
+
+                div.append(name);
+                div.append(img);
+                div.append(price);
+                div.append(stateString);
+                div.append(issuedate);
+                releaseHistory.append(div);
+                releaseHistory.append("<br/>");
+            })
+        })
+    }
+    //发布历史 上一页-下一页
+    //上一页，下一页
+    function prePage() {
+        var number = $("#pageNumber");
+        if(number.text() != 1){
+            var num = number.text();
+            num--;
+            number.empty();
+            number.text(num);
+        }
+        getReleaseHistory(num);
+    }
+    function afterPage() {
+        var number = $("#pageNumber");
+        var num = number.text();
+        num++;
+        number.empty();
+        number.text(num);
+        getReleaseHistory(num);
     }
 </script>
 </html>

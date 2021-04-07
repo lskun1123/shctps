@@ -46,4 +46,11 @@ public class GoodsServiceImpl implements GoodsService {
     public Goods getGoodsInfo(String gid) {
         return goodsMapper.selectByPrimaryKey(Integer.parseInt(gid));
     }
+
+    @Override
+    public List<Goods> getReleaseHistory(Integer uid,String pageNumber) {
+        //开始分页
+        PageHelper.startPage(Integer.parseInt(pageNumber),4);
+        return goodsMapper.selectByPid(uid);
+    }
 }

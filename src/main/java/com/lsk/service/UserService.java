@@ -8,7 +8,7 @@ import com.lsk.entity.User;
 public interface UserService {
     Boolean addUser(User user);
 
-    User selectUser(String username);
+    User selectUserByOpenID(String openID);
 
     Boolean checkStatus(String username, String password);
 

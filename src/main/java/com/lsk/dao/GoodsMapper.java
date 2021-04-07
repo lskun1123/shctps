@@ -1,6 +1,7 @@
 package com.lsk.dao;
 
 import com.lsk.entity.Goods;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface GoodsMapper {
     int updateByPrimaryKey(Goods record);
 
     List<Goods> selectAll();
+
+    List<Goods> selectByPid(@Param("pid") Integer uid);
 }

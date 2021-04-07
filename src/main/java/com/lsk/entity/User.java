@@ -2,14 +2,11 @@ package com.lsk.entity;
 
 import org.springframework.stereotype.Component;
 
-/**
- * @author LSKun
- */
 @Component
 public class User {
     private Integer uid;
 
-    private String snumber;
+    private String openid;
 
     private String nickname;
 
@@ -25,12 +22,12 @@ public class User {
         this.uid = uid;
     }
 
-    public String getSnumber() {
-        return snumber;
+    public String getOpenid() {
+        return openid;
     }
 
-    public void setSnumber(String snumber) {
-        this.snumber = snumber == null ? null : snumber.trim();
+    public void setOpenid(String openid) {
+        this.openid = openid == null ? null : openid.trim();
     }
 
     public String getNickname() {
@@ -61,7 +58,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "uid=" + uid +
-                ", snumber='" + snumber + '\'' +
+                ", openid='" + openid + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", img='" + img + '\'' +
                 ", contact='" + contact + '\'' +

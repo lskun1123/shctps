@@ -1,23 +1,13 @@
 package com.lsk.util;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.httpclient.HttpStatus;//此类需要添加maven依赖或jar包
 
 

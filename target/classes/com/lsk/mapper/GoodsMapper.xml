@@ -58,6 +58,12 @@
       from goods
       where state=1
     </select>
+    <select id="selectByPid" resultType="com.lsk.entity.Goods" parameterType="java.lang.Integer">
+      select
+      <include refid="Base_Column_List"></include>
+      from goods
+      where pid=#{pid} order by issuedate asc
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from goods
     where gid = #{gid,jdbcType=INTEGER}

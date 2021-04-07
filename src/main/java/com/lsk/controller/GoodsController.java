@@ -21,10 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author LSKun
@@ -38,6 +35,9 @@ public class GoodsController {
 
     @Autowired
     Goods goods;
+
+    @Autowired
+    User user;
 
     @RequestMapping("/releaseDo")
     public String upload(HttpSession session, @RequestParam("goodsImg") CommonsMultipartFile[] goodsImg,String goodsName,String goodsPrice,String goodsDesc, @RequestParam("category") String category){
@@ -82,6 +82,10 @@ public class GoodsController {
         return "main";
     }
 
+    /**
+     * 获取商品分类
+     * @return
+     */
     @RequestMapping("/getCategory")
     @ResponseBody
     public Result<List<GoodsCategory>> getCategory(){
@@ -92,6 +96,11 @@ public class GoodsController {
         return result;
     }
 
+    /**
+     * 获取商品列表信息（全查，分页）
+     * @param pageNumber
+     * @return
+     */
     @RequestMapping("/getGoodsList")
     @ResponseBody
     public Result<List<Goods>> getGoodsList(String pageNumber){
@@ -118,6 +127,18 @@ public class GoodsController {
         result.setData(goods);
         result.setCode(goods!= null?Result.SUCCESS:Result.ERROR);
         System.out.println(result);
+        return result;
+    }
+
+    @RequestMapping("/getReleaseHistory")
+    @ResponseBody
+    public Result<List<Goods>> getReleaseHistory(HttpSession session,String pageNumber){
+        user = (User) session.getAttribute("CUR_USER");
+        List<Goods> list = new ArrayList<>();
+        list = goodsService.getReleaseHistory(user.getUid(),pageNumber);
+        Result<List<Goods>> result = new Result<>();
+        result.setData(list);
+        result.setCode(list != null?Result.SUCCESS:Result.ERROR);
         return result;
     }
 

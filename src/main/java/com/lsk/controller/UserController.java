@@ -32,6 +32,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    User user;
+
     @RequestMapping("/reg.html")
     public String reg(){
         return "reg";
@@ -41,7 +44,7 @@ public class UserController {
     public String regDo(String snumber){
         System.out.println("snumber：" + snumber);
         User user = new User();
-        user.setSnumber(snumber);
+        //user.setSnumber(snumber);
         user.setImg("default.jpg");
         Boolean isSuccess = userService.addUser(user);
         return "redirect:"+(isSuccess?"/user/login.html":"/user/reg.html");
@@ -52,14 +55,16 @@ public class UserController {
         return "login";
     }
 
-      @PostMapping("/miniLogin")
-      @ResponseBody
-      public Map mini_Login(HttpServletRequest request, @RequestParam("code") String code) {
-        //String c=request.getParameter("code");//也可以通过此语句获取code值
-        System.out.println(code);
-          Map res = new HashMap(); // 这里是自定义类，用于封装返回的数据，你可以用map替代
+    @PostMapping("/miniLogin")
+    @ResponseBody
+    public Map mini_Login(HttpServletRequest request,@RequestParam("code") String openId) {
+        // String c=request.getParameter("code");//也可以通过此语句获取code值
+        System.out.println(openId);
+
+        Map res = new HashMap();
         String result = "";
-        try { // 请求微信服务器，用code换取openid。HttpUtil是工具类，后面会给出实现，Configure类是小程序配置信息，后面会给出代码
+        // 请求微信服务器，用code换取openid。HttpUtil是工具类，后面会给出实现，Configure类是小程序配置信息，后面会给出代码
+        try {
           result =
               HttpUtil.doGet(
                   "https://api.weixin.qq.com/sns/jscode2session?appid="
@@ -67,32 +72,68 @@ public class UserController {
                       + "&secret="
                       + Configure.mini_secret
                       + "&js_code="
-                      + code
+                      + openId
                       + "&grant_type=authorization_code",
                   null);
         } catch (Exception e) {
           e.printStackTrace();
         }
         // System.out.println(result);
-        JSONObject jsonObj = JSONObject.fromObject(result); // 解析从微信服务器上获取到的json字符串
-        System.out.println("用户的openid为：" + jsonObj.get("openid")); // 此处也可以得到session_key的值
+        // 解析从微信服务器上获取到的json字符串
+        JSONObject jsonObj = JSONObject.fromObject(result);
+        // 此处也可以得到session_key的值
+        System.out.println("用户的openid为：" + jsonObj.get("openid"));
         res.put("session_key", jsonObj.get("session_key").toString());
         // 这里Miniuser类是自己的业务类，你可以根据自己需要自行定义
-        /*
-          Miniuser miniuser =
-            miniuserService.isRegister(jsonObj.get("openid").toString()); // 去数据库判断用户是否存在该用户
-        if (miniuser != null) // 如果存在该用户
-        {
-          res.put("userid", miniuser.getMini_id()); // 将用户id返回
+        // 去数据库判断用户是否存在该用户
+        User miniuser = userService.selectUserByOpenID(jsonObj.get("openid").toString());
+        // 如果存在该用户
+        if (miniuser != null) {
+          // 将用户id返回
+          res.put("userid", miniuser.getOpenid());
           return res;
         }
         // 如果是新用户，就添加用户到数据库中
-        Miniuser userInfo = new Miniuser(); // 封装小程序对象
-        userInfo.setMini_openid(jsonObj.get("openid").toString());
+        // 封装小程序对象
+//        User userInfo = new User();
+//        userInfo.setOpenid(jsonObj.get("openid").toString());
+//        userInfo.setNickname(nickName);
+//        userInfo.setImg(avatarUrl);
+//        // 将用户信息保存到数据库中
+//        userService.addUser(userInfo);
+
+        // res.put("userid", miniuserService.isRegister(jsonObj.get("openid").toString()).getMini_id());
+
+        res.put("userid", jsonObj.get("openid"));
+        res.put("msg","USER_NOT_FOUND");
+        return res;
+    }
+
+    /**
+     * 小程序注册
+     * @param request
+     * @param openId
+     * @param nickName 昵称
+     * @param avatarUrl 头像
+     * @return
+     */
+    @PostMapping("/miniReg")
+    @ResponseBody
+    public Map mini_Reg(HttpServletRequest request,@RequestParam("openId") String openId, @RequestParam("nickName") String nickName, @RequestParam("avatarUrl") String avatarUrl) {
+        // String c=request.getParameter("code");//也可以通过此语句获取code值
+        System.out.println(openId);
+        System.out.println(nickName);
+        System.out.println(avatarUrl);
+        Map res = new HashMap();
+        User userInfo = new User();
+        userInfo.setOpenid(openId);
+        userInfo.setNickname(nickName);
+        userInfo.setImg(avatarUrl);
         // 将用户信息保存到数据库中
-        miniuserService.saveMiniUser(userInfo);*/
-        //res.put("userid", miniuserService.isRegister(jsonObj.get("openid").toString()).getMini_id());
-          res.put("userid",jsonObj.get("openid"));
+        userService.addUser(userInfo);
+
+        res.put("userid", openId);
+        res.put("msg","USER_NOT_FOUND");
         return res;
     }
 
@@ -108,12 +149,12 @@ public class UserController {
     public  String loginDo(String username, String password, HttpSession session){
         Boolean isXHUer = userService.checkStatus(username,password);
         if (isXHUer){
-            User user = userService.selectUser(username);
+            User user = userService.selectUserByOpenID(username);
             if(user != null){
                 session.setAttribute("CUR_USER",user);
                 return "main";
             }else{
-                user.setSnumber(username);
+                //user.setSnumber(username);
                 Boolean isSuccess = userService.addUser(user);
                 if(isSuccess){
                     session.setAttribute("CUR_USER",user);
