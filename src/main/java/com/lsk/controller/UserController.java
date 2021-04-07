@@ -81,7 +81,6 @@ public class UserController {
         /*
           Miniuser miniuser =
             miniuserService.isRegister(jsonObj.get("openid").toString()); // 去数据库判断用户是否存在该用户
-            三范式是否扫黄
         if (miniuser != null) // 如果存在该用户
         {
           res.put("userid", miniuser.getMini_id()); // 将用户id返回
