@@ -130,6 +130,12 @@ public class GoodsController {
         return result;
     }
 
+    /**
+     * 获取用户发布历史
+     * @param session
+     * @param pageNumber
+     * @return
+     */
     @RequestMapping("/getReleaseHistory")
     @ResponseBody
     public Result<List<Goods>> getReleaseHistory(HttpSession session,String pageNumber){

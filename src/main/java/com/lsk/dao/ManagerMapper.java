@@ -1,5 +1,6 @@
 package com.lsk.dao;
 
+import com.lsk.entity.Banner;
 import com.lsk.entity.Manager;
 import org.springframework.stereotype.Repository;
 

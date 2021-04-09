@@ -15,4 +15,6 @@ public interface BannerMapper {
     int updateByPrimaryKeySelective(Banner record);
 
     int updateByPrimaryKey(Banner record);
+
+    List<Banner> getDayBanner();
 }

@@ -42,4 +42,14 @@ public class Banner {
     public void setMid(Integer mid) {
         this.mid = mid;
     }
+
+    @Override
+    public String toString() {
+        return "Banner{" +
+                "bid=" + bid +
+                ", img='" + img + '\'' +
+                ", issuedate=" + issuedate +
+                ", mid=" + mid +
+                '}';
+    }
 }

@@ -45,6 +45,12 @@
     from banner
     where bid = #{bid,jdbcType=INTEGER}
   </select>
+  <select id="getDayBanner" resultType="com.lsk.entity.Banner">
+    select
+    <include refid="Base_Column_List"></include>
+    from banner
+    order by issuedate asc limit 4;
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from banner
     where bid = #{bid,jdbcType=INTEGER}
