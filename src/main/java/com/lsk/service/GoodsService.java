@@ -4,6 +4,7 @@ package com.lsk.service;
 import com.lsk.entity.Goods;
 import com.lsk.entity.GoodsCategory;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,4 +24,6 @@ public interface GoodsService {
     Goods getGoodsInfo(String gid);
 
     List<Goods> getReleaseHistory(Integer uid, String pageNumber);
+
+    HashMap<Integer,Goods> getDailyRecommendation();
 }

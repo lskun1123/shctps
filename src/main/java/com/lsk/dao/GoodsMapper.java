@@ -1,15 +1,11 @@
 package com.lsk.dao;
 
 import com.lsk.entity.Goods;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @author LSKun
- */
-@Repository
 public interface GoodsMapper {
     int deleteByPrimaryKey(Integer gid);
 
@@ -26,4 +22,9 @@ public interface GoodsMapper {
     List<Goods> selectAll();
 
     List<Goods> selectByPid(@Param("pid") Integer uid);
+
+    @MapKey("gid")
+    List<Goods> selectOrderByNewRelease();
+
+    List<Goods> selectorderByOldRelease();
 }

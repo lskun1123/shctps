@@ -57,7 +57,7 @@ public class UserController {
 
     @PostMapping("/miniLogin")
     @ResponseBody
-    public Map mini_Login(HttpServletRequest request,@RequestParam("code") String openId) {
+    public Map mini_Login(@RequestParam("code") String openId,HttpSession session) {
         // String c=request.getParameter("code");//也可以通过此语句获取code值
         System.out.println(openId);
 
@@ -91,6 +91,7 @@ public class UserController {
         if (miniuser != null) {
           // 将用户id返回
           res.put("userid", miniuser.getOpenid());
+          session.setAttribute("CUR_SER",miniuser);
           return res;
         }
         // 如果是新用户，就添加用户到数据库中

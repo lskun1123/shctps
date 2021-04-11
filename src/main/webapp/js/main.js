@@ -1,3 +1,4 @@
+
 //获取商品类别
 getCategory();
 function getCategory() {

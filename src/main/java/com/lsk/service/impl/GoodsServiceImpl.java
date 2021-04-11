@@ -10,7 +10,9 @@ import com.lsk.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author LSKun
@@ -52,5 +54,19 @@ public class GoodsServiceImpl implements GoodsService {
         //开始分页
         PageHelper.startPage(Integer.parseInt(pageNumber),4);
         return goodsMapper.selectByPid(uid);
+    }
+
+    @Override
+    public HashMap<Integer,Goods> getDailyRecommendation() {
+        List<Goods> orderByOldRelease = goodsMapper.selectorderByOldRelease();
+        List<Goods> orderByNewRelease = goodsMapper.selectOrderByNewRelease();
+        HashMap<Integer,Goods> map = new HashMap<>();
+        for(Goods goods:orderByOldRelease){
+            map.put(goods.getGid(),goods);
+        }
+        for(Goods goods:orderByNewRelease){
+            map.put(goods.getGid(),goods);
+        }
+        return map;
     }
 }

@@ -28,7 +28,7 @@ public class CosClient {
     private static final String BUCKETNAME = "shctps-1304936287";
     private static final String APPID = "1304936287";
     private static final String REGIONID = "ap-chengdu";
-   // private static final String KEY01="MyFile1/1.jpg";
+
     /**
      * 初始化CosClient相关配置， appid、accessKey、secretKey、region
      * @return
@@ -53,7 +53,6 @@ public class CosClient {
      * @return
      */
     public static String uploadFile(File localFile,String CloudFileName) {
-//        File localFile = new File("E:\\software\\JavaProject\\demo\\demo20\\src\\main\\resources\\1.jpg");
         PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKETNAME, CloudFileName, localFile);
 
         // 设置存储类型, 默认是标准(Standard), 低频(standard_ia),一般为标准的
@@ -77,14 +76,14 @@ public class CosClient {
 
     /**
      * 下载文件
-     * @param bucketName
-     * @param key
+     * @param bucketName 桶的名称
+     * @param CloudFileName
      * @return
      */
-    public static String downLoadFile(String bucketName, String key) {
+    public static String downLoadFile(String bucketName, String CloudFileName) {
         File downFile = new File("E:\\software\\1.jpg");
         COSClient cc = getCosClient();
-        GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, key);
+        GetObjectRequest getObjectRequest = new GetObjectRequest(bucketName, CloudFileName);
 
         ObjectMetadata downObjectMeta = cc.getObject(getObjectRequest, downFile);
         cc.shutdown();
@@ -94,13 +93,13 @@ public class CosClient {
 
     /**
      * 删除文件
-     * @param bucketName
-     * @param key
+     * @param bucketName 桶的名称
+     * @param CloudFileName
      */
-    public static void deleteFile(String bucketName, String key) {
+    public static void deleteFile(String bucketName, String CloudFileName) {
         COSClient cc = getCosClient();
         try {
-            cc.deleteObject(bucketName, key);
+            cc.deleteObject(bucketName, CloudFileName);
         } catch (CosClientException e) {
             e.printStackTrace();
         } finally {

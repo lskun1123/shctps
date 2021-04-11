@@ -10,8 +10,10 @@
     <result column="category" jdbcType="TINYINT" property="category" />
     <result column="pid" jdbcType="INTEGER" property="pid" />
     <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="quality" jdbcType="VARCHAR" property="quality" />
     <result column="issuedate" jdbcType="DATE" property="issuedate" />
     <result column="duedate" jdbcType="DATE" property="duedate" />
+    <result column="originalprice" jdbcType="DECIMAL" property="originalprice" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -43,8 +45,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    gid, goodsname, goodsimg, goodsprice, goodsdesc, category, pid, state, issuedate, 
-    duedate
+    gid, goodsname, goodsimg, goodsprice, goodsdesc, category, pid, state, quality, issuedate, 
+    duedate, originalprice
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -52,31 +54,45 @@
     from goods
     where gid = #{gid,jdbcType=INTEGER}
   </select>
-    <select id="selectAll" resultType="com.lsk.entity.Goods">
-      select
-      <include refid="Base_Column_List"></include>
-      from goods
-      where state=1
-    </select>
-    <select id="selectByPid" resultType="com.lsk.entity.Goods" parameterType="java.lang.Integer">
-      select
-      <include refid="Base_Column_List"></include>
-      from goods
-      where pid=#{pid} order by issuedate asc
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <select id="selectAll" resultType="com.lsk.entity.Goods">
+    select
+    <include refid="Base_Column_List"></include>
+    from goods
+    where state=1
+  </select>
+  <select id="selectByPid" resultType="com.lsk.entity.Goods" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"></include>
+    from goods
+    where pid=#{pid} order by issuedate asc
+  </select>
+  <select id="selectOrderByNewRelease" resultType="com.lsk.entity.Goods">
+    select
+    <include refid="Base_Column_List"></include>
+    from goods
+    order by issuedate asc limit 10
+  </select>
+  <select id="selectorderByOldRelease" resultType="com.lsk.entity.Goods">
+    select
+    <include refid="Base_Column_List"></include>
+    from goods
+    order by issuedate desc limit 10
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from goods
     where gid = #{gid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.lsk.entity.Goods">
     insert into goods (gid, goodsname, goodsimg, 
       goodsprice, goodsdesc, category, 
-      pid, state, issuedate, 
-      duedate)
+      pid, state, quality, 
+      issuedate, duedate, originalprice
+      )
     values (#{gid,jdbcType=INTEGER}, #{goodsname,jdbcType=VARCHAR}, #{goodsimg,jdbcType=VARCHAR}, 
       #{goodsprice,jdbcType=DECIMAL}, #{goodsdesc,jdbcType=VARCHAR}, #{category,jdbcType=TINYINT}, 
-      #{pid,jdbcType=INTEGER}, #{state,jdbcType=TINYINT}, #{issuedate,jdbcType=DATE}, 
-      #{duedate,jdbcType=DATE})
+      #{pid,jdbcType=INTEGER}, #{state,jdbcType=TINYINT}, #{quality,jdbcType=VARCHAR}, 
+      #{issuedate,jdbcType=DATE}, #{duedate,jdbcType=DATE}, #{originalprice,jdbcType=DECIMAL}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lsk.entity.Goods">
     insert into goods
@@ -105,11 +121,17 @@
       <if test="state != null">
         state,
       </if>
+      <if test="quality != null">
+        quality,
+      </if>
       <if test="issuedate != null">
         issuedate,
       </if>
       <if test="duedate != null">
         duedate,
+      </if>
+      <if test="originalprice != null">
+        originalprice,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -137,11 +159,17 @@
       <if test="state != null">
         #{state,jdbcType=TINYINT},
       </if>
+      <if test="quality != null">
+        #{quality,jdbcType=VARCHAR},
+      </if>
       <if test="issuedate != null">
         #{issuedate,jdbcType=DATE},
       </if>
       <if test="duedate != null">
         #{duedate,jdbcType=DATE},
+      </if>
+      <if test="originalprice != null">
+        #{originalprice,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -169,11 +197,17 @@
       <if test="state != null">
         state = #{state,jdbcType=TINYINT},
       </if>
+      <if test="quality != null">
+        quality = #{quality,jdbcType=VARCHAR},
+      </if>
       <if test="issuedate != null">
         issuedate = #{issuedate,jdbcType=DATE},
       </if>
       <if test="duedate != null">
         duedate = #{duedate,jdbcType=DATE},
+      </if>
+      <if test="originalprice != null">
+        originalprice = #{originalprice,jdbcType=DECIMAL},
       </if>
     </set>
     where gid = #{gid,jdbcType=INTEGER}
@@ -187,8 +221,10 @@
       category = #{category,jdbcType=TINYINT},
       pid = #{pid,jdbcType=INTEGER},
       state = #{state,jdbcType=TINYINT},
+      quality = #{quality,jdbcType=VARCHAR},
       issuedate = #{issuedate,jdbcType=DATE},
-      duedate = #{duedate,jdbcType=DATE}
+      duedate = #{duedate,jdbcType=DATE},
+      originalprice = #{originalprice,jdbcType=DECIMAL}
     where gid = #{gid,jdbcType=INTEGER}
   </update>
 </mapper>

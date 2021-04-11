@@ -1,12 +1,11 @@
 package com.lsk.entity;
 
 import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author LSKun
+ * 2021年4月9日17点30分
  */
 @Component
 public class Goods {
@@ -26,9 +25,13 @@ public class Goods {
 
     private int state;
 
+    private String quality;
+
     private Date issuedate;
 
     private Date duedate;
+
+    private float originalprice;
 
     public Integer getGid() {
         return gid;
@@ -94,6 +97,14 @@ public class Goods {
         this.state = state;
     }
 
+    public String getQuality() {
+        return quality;
+    }
+
+    public void setQuality(String quality) {
+        this.quality = quality == null ? null : quality.trim();
+    }
+
     public Date getIssuedate() {
         return issuedate;
     }
@@ -110,6 +121,14 @@ public class Goods {
         this.duedate = duedate;
     }
 
+    public float getOriginalprice() {
+        return originalprice;
+    }
+
+    public void setOriginalprice(float originalprice) {
+        this.originalprice = originalprice;
+    }
+
     @Override
     public String toString() {
         return "Goods{" +
@@ -121,8 +140,10 @@ public class Goods {
                 ", category=" + category +
                 ", pid=" + pid +
                 ", state=" + state +
+                ", quality='" + quality + '\'' +
                 ", issuedate=" + issuedate +
                 ", duedate=" + duedate +
+                ", originalprice=" + originalprice +
                 '}';
     }
 }
