@@ -90,8 +90,9 @@ public class UserController {
         // 如果存在该用户
         if (miniuser != null) {
           // 将用户id返回
-          res.put("userid", miniuser.getOpenid());
-          session.setAttribute("CUR_SER",miniuser);
+          res.put("openid", miniuser.getOpenid());
+          res.put("userid",miniuser.getUid());
+          session.setAttribute("CUR_USER",miniuser);
           return res;
         }
         // 如果是新用户，就添加用户到数据库中

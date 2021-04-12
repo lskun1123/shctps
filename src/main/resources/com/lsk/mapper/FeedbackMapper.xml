@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsk.dao.FeedbackMapper">
+  <resultMap id="BaseResultMap" type="com.lsk.entity.Feedback">
+    <id column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="feedbacktime" jdbcType="TIMESTAMP" property="feedbacktime" />
+    <result column="msg" jdbcType="VARCHAR" property="msg" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fid, uid, feedbacktime, msg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from feedback
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from feedback
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lsk.entity.Feedback">
+    insert into feedback (fid, uid, feedbacktime, 
+      msg)
+    values (#{fid,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{feedbacktime,jdbcType=TIMESTAMP}, 
+      #{msg,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lsk.entity.Feedback">
+    insert into feedback
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        fid,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="feedbacktime != null">
+        feedbacktime,
+      </if>
+      <if test="msg != null">
+        msg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="feedbacktime != null">
+        #{feedbacktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msg != null">
+        #{msg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lsk.entity.Feedback">
+    update feedback
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="feedbacktime != null">
+        feedbacktime = #{feedbacktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="msg != null">
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lsk.entity.Feedback">
+    update feedback
+    set uid = #{uid,jdbcType=INTEGER},
+      feedbacktime = #{feedbacktime,jdbcType=TIMESTAMP},
+      msg = #{msg,jdbcType=VARCHAR}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+</mapper>

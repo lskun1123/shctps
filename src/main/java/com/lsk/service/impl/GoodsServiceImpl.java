@@ -2,10 +2,12 @@ package com.lsk.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.lsk.dao.GoodsCategoryMapper;
+import com.lsk.dao.GoodsCollectionMapper;
 import com.lsk.dao.GoodsMapper;
 
 import com.lsk.entity.Goods;
 import com.lsk.entity.GoodsCategory;
+import com.lsk.entity.GoodsCollection;
 import com.lsk.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     GoodsCategoryMapper goodsCategoryMapper;
+
+    @Autowired
+    GoodsCollectionMapper goodsCollectionMapper;
 
     @Override
     public List<GoodsCategory> getCategory() {
@@ -68,5 +73,32 @@ public class GoodsServiceImpl implements GoodsService {
             map.put(goods.getGid(),goods);
         }
         return map;
+    }
+
+    @Override
+    public HashMap<Integer, Goods> searchByKey(String key,String pageNumber) {
+        HashMap<Integer,Goods> hashMap = new HashMap<>();
+        PageHelper.startPage(Integer.parseInt(pageNumber),4);
+        List<Goods> selectByGoodsName = goodsMapper.selectByGoodsName(key);
+        List<Goods> selectByGoodsDesc = goodsMapper.selectByGoodsDesc(key);
+        for(Goods goods:selectByGoodsName){
+            hashMap.put(goods.getGid(),goods);
+        }
+        for(Goods goods:selectByGoodsDesc){
+            hashMap.put(goods.getGid(),goods);
+        }
+        return hashMap;
+    }
+
+    @Override
+    public boolean addCollection(GoodsCollection collection) {
+        return goodsCollectionMapper.insertSelective(collection) > 0;
+    }
+
+    @Override
+    public List<Goods> getGoodsCollection(Integer uid,Integer pageNUmber) {
+        PageHelper.startPage(pageNUmber,4);
+        List<Goods> list = goodsMapper.getGoodsCollection(uid);
+        return list;
     }
 }

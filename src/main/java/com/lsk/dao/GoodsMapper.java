@@ -27,4 +27,10 @@ public interface GoodsMapper {
     List<Goods> selectOrderByNewRelease();
 
     List<Goods> selectorderByOldRelease();
+
+    List<Goods> selectByGoodsName(String key);
+
+    List<Goods> selectByGoodsDesc(String key);
+
+    List<Goods> getGoodsCollection(Integer uid);
 }

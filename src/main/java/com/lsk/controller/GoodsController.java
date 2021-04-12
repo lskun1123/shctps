@@ -3,6 +3,7 @@ package com.lsk.controller;
 import com.lsk.dto.Result;
 import com.lsk.entity.Goods;
 import com.lsk.entity.GoodsCategory;
+import com.lsk.entity.GoodsCollection;
 import com.lsk.entity.User;
 import com.lsk.service.GoodsService;
 import com.lsk.util.Base;
@@ -36,7 +37,8 @@ public class GoodsController {
     User user;
 
     /**
-     * @param session
+     * 2021-04-11 20:00:35
+     * @param userId
      * @param goodsImg
      * @param goodsName
      * @param goodsPrice
@@ -47,50 +49,47 @@ public class GoodsController {
      * @return
      */
     @RequestMapping("/releaseDo")
-    public String upload(HttpSession session, @RequestParam("goodsImg") CommonsMultipartFile[] goodsImg,String goodsName,String goodsPrice,String goodsDesc, @RequestParam("category") String category,String originalPrice,String quality){
-        User user = (User)session.getAttribute("CUR_USER");
-        System.out.println(user.toString());
+    public String upload(String userId, @RequestParam("goodsImg") String goodsImg,String goodsName,String goodsPrice,String goodsDesc, @RequestParam("category") String category,String originalPrice,String quality){
+        System.out.println("图片： " + goodsImg);
+        System.out.println("售价: " + goodsPrice);
+        //User user = (User)session.getAttribute("CUR_USER");
+        //System.out.println(user.toString());
         Goods goods = new Goods();
         goods.setGoodsname(goodsName);
         goods.setGoodsprice(Float.valueOf(goodsPrice).floatValue());
-        goods.setGoodsdesc(goodsDesc);
+        if(goodsDesc != null){
+            goods.setGoodsdesc(goodsDesc);
+        }
         goods.setCategory(Integer.valueOf(category).intValue());
         goods.setState(0);
-        goods.setPid(user.getUid());
+        goods.setPid(Integer.parseInt(userId));
         goods.setOriginalprice(Float.valueOf(originalPrice).floatValue());
-        goods.setQuality(quality);
+        if(quality != null){
+            goods.setQuality(quality);
+        }
         goods.setIssuedate(new Date());
         goods.setDuedate(Base.randomAfterDate());
-        String goodsImgs = "";
-        for(CommonsMultipartFile multipartFile : goodsImg){
-            if(!multipartFile.isEmpty()){
-                String fileName = multipartFile.getOriginalFilename();
-                File dir = new File("D://images");
-                if(!dir.exists()){
-                    dir.mkdirs();
-                }
-                String newFileName = UUID.randomUUID().toString() + fileName.substring(fileName.lastIndexOf("."));
-                goodsImgs += newFileName + ",";
-                File file = new File(dir, newFileName);
-                try {
-                    //保存文件
-                    multipartFile.transferTo(file);
-                    CosClient.uploadFile(file,"goodsImg/"+newFileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                break;
-            }
-        }
-        goodsImgs = goodsImgs.substring(0,goodsImgs.length() - 1);
-        goods.setGoodsimg(goodsImgs);
+        //String goodsImgs = "";
+//        for(String multipartFile : goodsImg){
+//            if(!multipartFile.isEmpty()){
+//                goodsImgs += multipartFile + ",";
+//            } else {
+//                break;
+//            }
+//        }
+        //goodsImgs = goodsImgs.substring(0,goodsImgs.length() - 1);
+        goods.setGoodsimg(goodsImg);
         System.out.println(goods.toString());
         Boolean isSuccess = goodsService.addGoods(goods);
 
         return "main";
     }
 
+    /**
+     * 2021-04-02 15:59:49
+     * @param goodsImg
+     * @return
+     */
     @RequestMapping("/upload")
     public String upload2(@RequestParam(value = "file",required = false) CommonsMultipartFile goodsImg){
         String goodsImgs = "";
@@ -207,12 +206,62 @@ public class GoodsController {
      */
     @RequestMapping("/getDailyRecommendation")
     @ResponseBody
-    public Result<HashMap<Integer, Goods>> getDailyRecommendation(){
+    public Result<List<Goods>> getDailyRecommendation(){
         HashMap<Integer,Goods> hashMap = goodsService.getDailyRecommendation();
+        Result<List<Goods>> result = new Result<>();
+        List<Goods> list = new ArrayList<>();
+        hashMap.forEach((key,value) -> {
+            list.add(value);
+        });
+        result.setData(list);
+        result.setCode(hashMap != null?Result.SUCCESS:Result.ERROR);
+        return result;
+    }
+
+    /**
+     * 物品搜索功能
+     * 2021-04-11 20:18:12
+     * @param key
+     * @return
+     */
+    @RequestMapping("/searchGoods")
+    @ResponseBody
+    public Result<HashMap<Integer,Goods>> searchGoods(String key,String pageNumber){
+        HashMap<Integer,Goods> hashMap = goodsService.searchByKey(key,pageNumber);
         Result<HashMap<Integer,Goods>> result = new Result<>();
         result.setData(hashMap);
         result.setCode(hashMap != null?Result.SUCCESS:Result.ERROR);
         return result;
+    }
+
+    /**
+     * 用户收藏商品
+     * 2021-04-12 10:01:38
+     * @param session
+     * @param gid 商品id
+     * @return
+     */
+    @RequestMapping("/addGoodsCollection")
+    @ResponseBody
+    public boolean addGoodsCollection(HttpSession session,String gid){
+        User user = (User) session.getAttribute("CUR_USER");
+        GoodsCollection collection = new GoodsCollection();
+        collection.setCollector(user.getUid());
+        collection.setGid(Integer.parseInt(gid));
+        boolean isSuccess = goodsService.addCollection(collection);
+        return isSuccess;
+    }
+
+    @RequestMapping("/getGoodsCollection")
+    @ResponseBody
+    public Result<List<Goods>> getGoodsCollection(HttpSession session,String pageNumber){
+        User user = (User) session.getAttribute("CUR_USER");
+        List<Goods> list = new ArrayList<>();
+        list = goodsService.getGoodsCollection(user.getUid(),Integer.parseInt(pageNumber));
+        Result<List<Goods>> listResult = new Result<>();
+        listResult.setData(list);
+        listResult.setCode(list != null?Result.SUCCESS:Result.ERROR);
+        return listResult;
     }
 
 }

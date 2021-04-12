@@ -78,6 +78,18 @@
     from goods
     order by issuedate desc limit 10
   </select>
+    <select id="selectByGoodsName" resultType="com.lsk.entity.Goods" parameterType="java.lang.String">
+      select
+      <include refid="Base_Column_List"></include>
+      from goods
+      where goodsname like %#{key}%
+    </select>
+  <select id="selectByGoodsDesc" resultType="com.lsk.entity.Goods" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"></include>
+    from goods
+    where goodsdesc like %#{key}%
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from goods
     where gid = #{gid,jdbcType=INTEGER}
