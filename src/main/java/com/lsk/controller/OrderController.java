@@ -17,6 +17,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -89,7 +90,7 @@ public class OrderController {
      * @return
      * @date 2021-04-22 21:35:14
      */
-    @RequestMapping("cancelOrder")
+    @RequestMapping(value = "cancelOrder",method = RequestMethod.POST)
     @ResponseBody
     public Boolean cancelOrder(String gid,String oid){
         System.out.println("gid+oid : " + gid +"  "+ oid);
