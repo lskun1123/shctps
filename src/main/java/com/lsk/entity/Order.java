@@ -1,14 +1,11 @@
 package com.lsk.entity;
 
-import org.springframework.stereotype.Component;
-
-import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * @author LSKun
  */
-@Component
 public class Order {
     private Long oid;
 
@@ -18,7 +15,9 @@ public class Order {
 
     private float payamount;
 
-    private Date dealtime;
+    private Timestamp dealtime;
+
+    private int state;
 
     public Long getOid() {
         return oid;
@@ -52,12 +51,20 @@ public class Order {
         this.payamount = payamount;
     }
 
-    public Date getDealtime() {
+    public Timestamp getDealtime() {
         return dealtime;
     }
 
-    public void setDealtime(Date dealtime) {
+    public void setDealtime(Timestamp dealtime) {
         this.dealtime = dealtime;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     @Override
@@ -68,6 +75,7 @@ public class Order {
                 ", payer=" + payer +
                 ", payamount=" + payamount +
                 ", dealtime=" + dealtime +
+                ", state=" + state +
                 '}';
     }
 }

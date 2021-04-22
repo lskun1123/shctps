@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsk.dao.ComplexReviewMapper">
+    <resultMap id="BaseResultMap" type="com.lsk.entity.ComplexReview">
+        <id column="rid" jdbcType="INTEGER" property="rid" />
+        <result column="viewobject" jdbcType="TINYINT" property="viewobject" />
+        <result column="objectid" jdbcType="INTEGER" property="objectid" />
+        <result column="reviewcontent" jdbcType="VARCHAR" property="reviewcontent" />
+        <result column="reviewtime" jdbcType="TIMESTAMP" property="reviewtime" />
+        <result column="postid" jdbcType="INTEGER" property="postid" />
+        <result column="objectname" jdbcType="VARCHAR" property="objectname" />
+        <association property="user" javaType="com.lsk.entity.User">
+            <id column="uid" jdbcType="INTEGER" property="uid" />
+            <result column="openid" jdbcType="VARCHAR" property="openid" />
+            <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+            <result column="img" jdbcType="VARCHAR" property="img" />
+            <result column="contact" jdbcType="VARCHAR" property="contact" />
+        </association>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        review.rid, review.viewobject, review.objectid, review.reviewcontent, review.reviewtime, review.postid, review.objectname, user.uid, user.openid, user.nickname, user.img, user.contact
+    </sql>
+    <select id="selectByPostId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"></include>
+        from review
+        left join user
+        on review.reviewer = user.uid
+        where review.postid=#{postid}
+    </select>
+</mapper>

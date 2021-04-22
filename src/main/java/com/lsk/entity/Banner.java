@@ -1,13 +1,17 @@
 package com.lsk.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
+/**
+ * @author LSKun
+ */
 public class Banner {
     private Integer bid;
 
     private String img;
 
-    private Date issuedate;
+    private Timestamp issuedate;
 
     private Integer mid;
 
@@ -27,11 +31,11 @@ public class Banner {
         this.img = img == null ? null : img.trim();
     }
 
-    public Date getIssuedate() {
+    public Timestamp getIssuedate() {
         return issuedate;
     }
 
-    public void setIssuedate(Date issuedate) {
+    public void setIssuedate(Timestamp issuedate) {
         this.issuedate = issuedate;
     }
 

@@ -1,6 +1,7 @@
 package com.lsk.controller;
 
 import com.lsk.dto.Result;
+import com.lsk.entity.Feedback;
 import com.lsk.entity.User;
 import com.lsk.service.UserService;
 import com.lsk.util.Configure;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -57,9 +60,9 @@ public class UserController {
 
     @PostMapping("/miniLogin")
     @ResponseBody
-    public Map mini_Login(@RequestParam("code") String openId,HttpSession session) {
+    public Map mini_Login(@RequestParam("code") String code,HttpSession session) {
         // String c=request.getParameter("code");//也可以通过此语句获取code值
-        System.out.println(openId);
+        System.out.println(code);
 
         Map res = new HashMap();
         String result = "";
@@ -72,7 +75,7 @@ public class UserController {
                       + "&secret="
                       + Configure.mini_secret
                       + "&js_code="
-                      + openId
+                      + code
                       + "&grant_type=authorization_code",
                   null);
         } catch (Exception e) {
@@ -135,7 +138,7 @@ public class UserController {
         userService.addUser(userInfo);
 
         res.put("userid", openId);
-        res.put("msg","USER_NOT_FOUND");
+        //res.put("msg","USER_NOT_FOUND");
         return res;
     }
 
@@ -185,6 +188,16 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping("/getUser")
+    @ResponseBody
+    public Result<User> getUser(String pid){
+        User user = userService.selectUserByUserID(pid);
+        Result<User> result = new Result<>();
+        result.setCode(Result.SUCCESS);
+        result.setData(user);
+        return result;
+    }
+
     /**
      * 进入编辑用户界面
      * @return
@@ -228,5 +241,36 @@ public class UserController {
         }
         Boolean isSuccess = userService.editUser(user);
         return "mine";
+    }
+
+    /**
+     * 添加反馈
+     * 2021-04-12 17:17:51
+     * @param userId
+     * @param msg
+     * @param feedImg
+     * @return
+     */
+    @RequestMapping("/addFeedback")
+    public String addFeedback(String userId,String msg,String feedImg){
+        Feedback feedback = new Feedback();
+        feedback.setFeedbacktime(new Timestamp(System.currentTimeMillis()));
+        feedback.setMsg(msg);
+        feedback.setUid(Integer.parseInt(userId));
+        if(feedImg != null){
+            feedback.setFeedimg(feedImg);
+        }
+        boolean isSuccess = userService.addFeedback(feedback);
+        return "mine";
+    }
+
+    @RequestMapping("/getBuyer")
+    @ResponseBody
+    public Result<User> getBuyer(HttpSession session){
+        User user = (User) session.getAttribute("CUR_USER");
+        Result<User> result = new Result<>();
+        result.setData(user);
+        result.setCode(user != null ? Result.SUCCESS : Result.ERROR);
+        return result;
     }
 }

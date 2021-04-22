@@ -33,4 +33,14 @@ public interface GoodsMapper {
     List<Goods> selectByGoodsDesc(String key);
 
     List<Goods> getGoodsCollection(Integer uid);
+
+    List<Goods> selectByGoodsNameOrderByPrice(String key);
+
+    List<Goods> selectByGoodsDescOrderByPrice(String key);
+
+    List<Goods> getGoodsByCategory(Integer category);
+
+    int updateState(int gid);
+
+    int updateStateTo1(int gid);
 }

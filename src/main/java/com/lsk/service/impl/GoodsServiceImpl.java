@@ -9,6 +9,7 @@ import com.lsk.entity.Goods;
 import com.lsk.entity.GoodsCategory;
 import com.lsk.entity.GoodsCollection;
 import com.lsk.service.GoodsService;
+import com.lsk.util.PageHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +45,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getAbstractGoodsInfo(String pageNumber) {
         //开始分页
-        PageHelper.startPage(Integer.parseInt(pageNumber),4);
+        PageHelper.startPage(Integer.parseInt(pageNumber), PageHelperUtil.GOODS_NUMBER);
         List<Goods> list = goodsMapper.selectAll();
         return list;
     }
@@ -55,9 +56,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Goods> getReleaseHistory(Integer uid,String pageNumber) {
-        //开始分页
-        PageHelper.startPage(Integer.parseInt(pageNumber),4);
+    public List<Goods> getReleaseHistory(Integer uid) {
         return goodsMapper.selectByPid(uid);
     }
 
@@ -78,7 +77,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public HashMap<Integer, Goods> searchByKey(String key,String pageNumber) {
         HashMap<Integer,Goods> hashMap = new HashMap<>();
-        PageHelper.startPage(Integer.parseInt(pageNumber),4);
+        PageHelper.startPage(Integer.parseInt(pageNumber),PageHelperUtil.GOODS_NUMBER);
         List<Goods> selectByGoodsName = goodsMapper.selectByGoodsName(key);
         List<Goods> selectByGoodsDesc = goodsMapper.selectByGoodsDesc(key);
         for(Goods goods:selectByGoodsName){
@@ -97,8 +96,30 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public List<Goods> getGoodsCollection(Integer uid,Integer pageNUmber) {
-        PageHelper.startPage(pageNUmber,4);
+        PageHelper.startPage(pageNUmber,PageHelperUtil.GOODS_NUMBER);
         List<Goods> list = goodsMapper.getGoodsCollection(uid);
+        return list;
+    }
+
+    @Override
+    public HashMap<Integer, Goods> searchByKeyOrderByPrice(String key, String pageNumber) {
+        HashMap<Integer,Goods> hashMap = new HashMap<>();
+        PageHelper.startPage(Integer.parseInt(pageNumber),PageHelperUtil.GOODS_NUMBER);
+        List<Goods> selectByGoodsName = goodsMapper.selectByGoodsNameOrderByPrice(key);
+        List<Goods> selectByGoodsDesc = goodsMapper.selectByGoodsDescOrderByPrice(key);
+        for(Goods goods:selectByGoodsName){
+            hashMap.put(goods.getGid(),goods);
+        }
+        for(Goods goods:selectByGoodsDesc){
+            hashMap.put(goods.getGid(),goods);
+        }
+        return hashMap;
+    }
+
+    @Override
+    public List<Goods> getGoodsByCategory(Integer category, Integer pageNumber) {
+        PageHelper.startPage(pageNumber,PageHelperUtil.GOODS_NUMBER);
+        List<Goods> list = goodsMapper.getGoodsByCategory(category);
         return list;
     }
 }

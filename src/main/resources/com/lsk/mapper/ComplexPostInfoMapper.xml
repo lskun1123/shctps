@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsk.dao.ComplexPostInfoMapper">
+    <resultMap id="BaseResultMap" type="com.lsk.entity.ComplexPostInfo">
+        <id column="postid" jdbcType="INTEGER" property="postid" />
+        <result column="postcontent" jdbcType="VARCHAR" property="postcontent" />
+        <result column="posttime" jdbcType="TIMESTAMP" property="posttime" />
+        <result column="views" jdbcType="INTEGER" property="views" />
+        <result column="postimg" jdbcType="VARCHAR" property="postimg" />
+        <association property="user" javaType="com.lsk.entity.User">
+            <id column="uid" jdbcType="INTEGER" property="uid" />
+            <result column="openid" jdbcType="VARCHAR" property="openid" />
+            <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+            <result column="img" jdbcType="VARCHAR" property="img" />
+            <result column="contact" jdbcType="VARCHAR" property="contact" />
+        </association>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        postinfo.postid, postinfo.poster,postinfo.postcontent, postinfo.posttime, postinfo.views, postinfo.postimg, user.uid, user.openid, user.nickname, user.img, user.contact
+    </sql>
+
+    <select id="getAllComplexPostInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>
+        from postinfo
+        left join user
+        on postinfo.poster=user.uid
+        order by postinfo.posttime desc
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"></include>
+        from postinfo
+        left join user
+        on postinfo.poster=user.uid
+        where postid=#{postid}
+        order by postinfo.posttime desc
+    </select>
+</mapper>

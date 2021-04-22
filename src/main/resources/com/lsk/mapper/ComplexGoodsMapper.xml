@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsk.dao.ComplexGoodsDaoMapper">
+    <resultMap id="BaseResultMap" type="com.lsk.entity.ComplexGoods">
+        <id column="gid" jdbcType="INTEGER" property="gid" />
+        <result column="goodsname" jdbcType="VARCHAR" property="goodsname" />
+        <result column="goodsimg" jdbcType="VARCHAR" property="goodsimg" />
+        <result column="goodsprice" jdbcType="DECIMAL" property="goodsprice" />
+        <result column="goodsdesc" jdbcType="VARCHAR" property="goodsdesc" />
+        <result column="category" jdbcType="TINYINT" property="category" />
+        <result column="state" jdbcType="TINYINT" property="state" />
+        <result column="quality" jdbcType="VARCHAR" property="quality" />
+        <result column="issuedate" jdbcType="TIMESTAMP" property="issuedate" />
+        <result column="duedate" jdbcType="TIMESTAMP" property="duedate" />
+        <result column="originalprice" jdbcType="DECIMAL" property="originalprice" />
+        <association property="user" column="user" javaType="com.lsk.entity.User" resultMap="UserResultMap" />
+    </resultMap>
+    
+    <resultMap id="UserResultMap" type="com.lsk.entity.User">
+        <id column="uid" jdbcType="INTEGER" property="uid" />
+        <result column="openid" jdbcType="VARCHAR" property="openid" />
+        <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+        <result column="img" jdbcType="VARCHAR" property="img" />
+        <result column="contact" jdbcType="VARCHAR" property="contact" />
+    </resultMap>
+
+    <select id="selectAllComplexGoods" resultType="com.lsk.entity.ComplexGoods">
+        select
+        * from
+        goods left join user on user.uid = goods.pid
+    </select>
+</mapper>

@@ -2,6 +2,9 @@ package com.lsk.entity;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * @author LSKun
+ */
 @Component
 public class User {
     private Integer uid;

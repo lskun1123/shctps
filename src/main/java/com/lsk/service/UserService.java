@@ -1,5 +1,6 @@
 package com.lsk.service;
 
+import com.lsk.entity.Feedback;
 import com.lsk.entity.User;
 
 /**
@@ -13,4 +14,8 @@ public interface UserService {
     Boolean checkStatus(String username, String password);
 
     Boolean editUser(User user);
+
+    boolean addFeedback(Feedback feedback);
+
+    User selectUserByUserID(String pid);
 }

@@ -24,7 +24,7 @@ public interface GoodsService {
 
     Goods getGoodsInfo(String gid);
 
-    List<Goods> getReleaseHistory(Integer uid, String pageNumber);
+    List<Goods> getReleaseHistory(Integer uid);
 
     HashMap<Integer,Goods> getDailyRecommendation();
 
@@ -33,4 +33,9 @@ public interface GoodsService {
     boolean addCollection(GoodsCollection collection);
 
     List<Goods> getGoodsCollection(Integer uid,Integer pageNumber);
+
+    HashMap<Integer, Goods> searchByKeyOrderByPrice(String key, String pageNumber);
+
+    List<Goods> getGoodsByCategory(Integer category, Integer pageNumber);
+
 }

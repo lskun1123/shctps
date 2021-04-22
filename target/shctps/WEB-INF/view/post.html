@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>广场</title>
+    <script src="/shctps/js/jquery-1.11.2.js"></script>
+</head>
+<body>
+求购广场
+<br>
+<a href="/shctps/post/releasePost.html">发布求购信息</a>
+<br>
+帖子展示
+<p id="pageNumber" style="display: none">1</p>
+<span onclick="prePage()">上一页</span>&nbsp;&nbsp;<span onclick="afterPage()">下一页</span>
+<div id="posts">
+
+</div>
+</body>
+<script type="text/javascript">
+    getPosts(1);
+
+    function getPosts(pageNumber) {
+        var posts = $("#posts");
+        posts.empty();
+        $.getJSON("/shctps/post/getPosts",{
+            "pageNumber":pageNumber
+        },function (data) {
+            var postInfo = $("#postInfo");
+            postInfo.empty();
+            var postInfoList = data.data;
+            $.each(postInfoList,function (index, data) {
+                var post = $("<a id='"+data.postid + "' href='/shctps/post/postPage.html?postid="+ data.postid + "'></a>");
+                posts.append(post);
+                getUser(data.poster,data.postid);
+                var postContent = $("<p></p>");
+                postContent.text(data.postcontent);
+                post.append(postContent);
+                var postTime = $("<p></p>");
+                postTime.text(data.posttime);
+                post.append(postTime);
+                post.append("<br/>");
+                posts.append(post);
+            })
+        })
+    }
+    function getUser(pid,postid) {
+        var post = $("#"+postid);
+        $.getJSON("/shctps/user/getUser",{
+            "pid":pid
+        },function (msg) {
+            console.log("发布者信息：" + msg.data);
+
+            var username = $("<p></p>");
+            username.append("发布人： " + msg.data.nickname);
+            post.append(username);
+        });
+    }
+
+    //发布历史 上一页-下一页
+    //上一页，下一页
+    function prePage() {
+        var number = $("#pageNumber");
+        if(number.text() != 1){
+            var num = number.text();
+            num--;
+            number.empty();
+            number.text(num);
+        }
+        getPosts(num);
+    }
+    function afterPage() {
+        var number = $("#pageNumber");
+        var num = number.text();
+        num++;
+        number.empty();
+        number.text(num);
+        getPosts(num);
+    }
+</script>
+</html>

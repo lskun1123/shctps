@@ -1,15 +1,9 @@
 package com.lsk.dao;
 
 import com.lsk.entity.PostInfo;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
-/**
- * @author LSKun
- */
-@Repository
 public interface PostInfoMapper {
     int deleteByPrimaryKey(Integer postid);
 
@@ -22,4 +16,8 @@ public interface PostInfoMapper {
     int updateByPrimaryKeySelective(PostInfo record);
 
     int updateByPrimaryKey(PostInfo record);
+
+    List<PostInfo> selectAll();
+
+    int addViewer(Integer postid);
 }

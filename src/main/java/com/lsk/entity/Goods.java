@@ -1,6 +1,8 @@
 package com.lsk.entity;
 
 import org.springframework.stereotype.Component;
+
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -27,9 +29,9 @@ public class Goods {
 
     private String quality;
 
-    private Date issuedate;
+    private Timestamp issuedate;
 
-    private Date duedate;
+    private Timestamp duedate;
 
     private float originalprice;
 
@@ -105,19 +107,19 @@ public class Goods {
         this.quality = quality == null ? null : quality.trim();
     }
 
-    public Date getIssuedate() {
+    public Timestamp getIssuedate() {
         return issuedate;
     }
 
-    public void setIssuedate(Date issuedate) {
+    public void setIssuedate(Timestamp issuedate) {
         this.issuedate = issuedate;
     }
 
-    public Date getDuedate() {
+    public Timestamp getDuedate() {
         return duedate;
     }
 
-    public void setDuedate(Date duedate) {
+    public void setDuedate(Timestamp duedate) {
         this.duedate = duedate;
     }
 

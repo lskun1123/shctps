@@ -2,9 +2,13 @@ package com.lsk.dao;
 
 import com.lsk.entity.User;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+/**
+ * @author LSKun
+ * 2021-04-12 10:46:54
+ */
+@Repository
 public interface UserMapper {
     int deleteByPrimaryKey(Integer uid);
 

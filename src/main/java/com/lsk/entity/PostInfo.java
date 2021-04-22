@@ -1,13 +1,11 @@
 package com.lsk.entity;
 
-import org.springframework.stereotype.Component;
-
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * @author LSKun
  */
-@Component
 public class PostInfo {
     private Integer postid;
 
@@ -15,7 +13,11 @@ public class PostInfo {
 
     private String postcontent;
 
-    private Date posttime;
+    private Timestamp posttime;
+
+    private Integer views;
+
+    private String postimg;
 
     public Integer getPostid() {
         return postid;
@@ -41,12 +43,28 @@ public class PostInfo {
         this.postcontent = postcontent == null ? null : postcontent.trim();
     }
 
-    public Date getPosttime() {
+    public Timestamp getPosttime() {
         return posttime;
     }
 
-    public void setPosttime(Date posttime) {
+    public void setPosttime(Timestamp posttime) {
         this.posttime = posttime;
+    }
+
+    public Integer getViews() {
+        return views;
+    }
+
+    public void setViews(Integer views) {
+        this.views = views;
+    }
+
+    public String getPostimg() {
+        return postimg;
+    }
+
+    public void setPostimg(String postimg) {
+        this.postimg = postimg == null ? null : postimg.trim();
     }
 
     @Override
@@ -56,6 +74,8 @@ public class PostInfo {
                 ", poster=" + poster +
                 ", postcontent='" + postcontent + '\'' +
                 ", posttime=" + posttime +
+                ", views=" + views +
+                ", postimg='" + postimg + '\'' +
                 '}';
     }
 }

@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.lsk.entity.Banner">
     <id column="bid" jdbcType="INTEGER" property="bid" />
     <result column="img" jdbcType="CHAR" property="img" />
-    <result column="issuedate" jdbcType="DATE" property="issuedate" />
+    <result column="issuedate" jdbcType="TIMESTAMP" property="issuedate" />
     <result column="mid" jdbcType="INTEGER" property="mid" />
   </resultMap>
   <sql id="Example_Where_Clause">

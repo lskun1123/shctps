@@ -1,14 +1,9 @@
 package com.lsk.dao;
 
 import com.lsk.entity.Review;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @author LSKun
- */
-@Repository
 public interface ReviewMapper {
     int deleteByPrimaryKey(Integer rid);
 
@@ -21,4 +16,6 @@ public interface ReviewMapper {
     int updateByPrimaryKeySelective(Review record);
 
     int updateByPrimaryKey(Review record);
+
+    List<Review> selectByPostId(int postid);
 }

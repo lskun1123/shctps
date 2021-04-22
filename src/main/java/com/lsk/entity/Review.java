@@ -1,25 +1,35 @@
 package com.lsk.entity;
 
-import org.springframework.stereotype.Component;
-
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * @author LSKun
  */
-@Component
 public class Review {
     private Integer rid;
 
     private Integer reviewer;
 
-    private Byte viewobject;
+    private int viewobject;
 
     private Integer objectid;
 
     private String reviewcontent;
 
-    private Date reviewtime;
+    private Timestamp reviewtime;
+
+    private Integer postid;
+
+    private String objectname;
+
+    public String getObjectname() {
+        return objectname;
+    }
+
+    public void setObjectname(String objectname) {
+        this.objectname = objectname;
+    }
 
     public Integer getRid() {
         return rid;
@@ -37,11 +47,11 @@ public class Review {
         this.reviewer = reviewer;
     }
 
-    public Byte getViewobject() {
+    public int getViewobject() {
         return viewobject;
     }
 
-    public void setViewobject(Byte viewobject) {
+    public void setViewobject(int viewobject) {
         this.viewobject = viewobject;
     }
 
@@ -61,12 +71,20 @@ public class Review {
         this.reviewcontent = reviewcontent == null ? null : reviewcontent.trim();
     }
 
-    public Date getReviewtime() {
+    public Timestamp getReviewtime() {
         return reviewtime;
     }
 
-    public void setReviewtime(Date reviewtime) {
+    public void setReviewtime(Timestamp reviewtime) {
         this.reviewtime = reviewtime;
+    }
+
+    public Integer getPostid() {
+        return postid;
+    }
+
+    public void setPostid(Integer postid) {
+        this.postid = postid;
     }
 
     @Override
@@ -78,6 +96,8 @@ public class Review {
                 ", objectid=" + objectid +
                 ", reviewcontent='" + reviewcontent + '\'' +
                 ", reviewtime=" + reviewtime +
+                ", postid=" + postid +
+                ", objectname='" + objectname + '\'' +
                 '}';
     }
 }

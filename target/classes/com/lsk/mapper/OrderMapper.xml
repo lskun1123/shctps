@@ -6,7 +6,8 @@
     <result column="gid" jdbcType="INTEGER" property="gid" />
     <result column="payer" jdbcType="INTEGER" property="payer" />
     <result column="payamount" jdbcType="DECIMAL" property="payamount" />
-    <result column="dealtime" jdbcType="DATE" property="dealtime" />
+    <result column="dealtime" jdbcType="TIMESTAMP" property="dealtime" />
+    <result column="state" jdbcType="TINYINT" property="state" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -38,26 +39,28 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    oid, gid, payer, payamount, dealtime
+    oid, gid, payer, payamount, dealtime, state
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from order
+    from `order`
     where oid = #{oid,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from order
+    delete from `order`
     where oid = #{oid,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lsk.entity.Order">
-    insert into order (oid, gid, payer, 
-      payamount, dealtime)
+    insert into `order` (oid, gid, payer,
+      payamount, dealtime, state
+      )
     values (#{oid,jdbcType=BIGINT}, #{gid,jdbcType=INTEGER}, #{payer,jdbcType=INTEGER}, 
-      #{payamount,jdbcType=DECIMAL}, #{dealtime,jdbcType=DATE})
+      #{payamount,jdbcType=DECIMAL}, #{dealtime,jdbcType=DATE}, #{state,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lsk.entity.Order">
-    insert into order
+    insert into `order`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="oid != null">
         oid,
@@ -73,6 +76,9 @@
       </if>
       <if test="dealtime != null">
         dealtime,
+      </if>
+      <if test="state != null">
+        state,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -91,10 +97,13 @@
       <if test="dealtime != null">
         #{dealtime,jdbcType=DATE},
       </if>
+      <if test="state != null">
+        #{state,jdbcType=TINYINT},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lsk.entity.Order">
-    update order
+    update `order`
     <set>
       <if test="gid != null">
         gid = #{gid,jdbcType=INTEGER},
@@ -108,15 +117,29 @@
       <if test="dealtime != null">
         dealtime = #{dealtime,jdbcType=DATE},
       </if>
+      <if test="state != null">
+        state = #{state,jdbcType=TINYINT},
+      </if>
     </set>
     where oid = #{oid,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lsk.entity.Order">
-    update order
+    update `order`
     set gid = #{gid,jdbcType=INTEGER},
       payer = #{payer,jdbcType=INTEGER},
       payamount = #{payamount,jdbcType=DECIMAL},
-      dealtime = #{dealtime,jdbcType=DATE}
+      dealtime = #{dealtime,jdbcType=DATE},
+      state = #{state,jdbcType=TINYINT}
     where oid = #{oid,jdbcType=BIGINT}
   </update>
+  <update id="confirmOrder" parameterType="java.lang.Integer">
+    update `order`
+    set state = 1 and dealtime = #{dealtime}
+    where oid = #{oid}
+  </update>
+    <update id="updateStateTo2">
+      update `order`
+      set state = 2
+      where oid = #{oid}
+    </update>
 </mapper>

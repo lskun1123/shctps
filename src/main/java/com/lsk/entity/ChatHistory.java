@@ -1,15 +1,12 @@
 package com.lsk.entity;
 
-import org.springframework.stereotype.Component;
-
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * @author LSKun
  */
-@Component
 public class ChatHistory {
-
     private Long cid;
 
     private Integer sayer;
@@ -18,9 +15,11 @@ public class ChatHistory {
 
     private String chatcontent;
 
-    private Date chattime;
+    private Timestamp chattime;
 
-    private Byte tag;
+    private int tag;
+
+    private int isread;
 
     public Long getCid() {
         return cid;
@@ -54,20 +53,28 @@ public class ChatHistory {
         this.chatcontent = chatcontent == null ? null : chatcontent.trim();
     }
 
-    public Date getChattime() {
+    public Timestamp getChattime() {
         return chattime;
     }
 
-    public void setChattime(Date chattime) {
+    public void setChattime(Timestamp chattime) {
         this.chattime = chattime;
     }
 
-    public Byte getTag() {
+    public int getTag() {
         return tag;
     }
 
-    public void setTag(Byte tag) {
+    public void setTag(int tag) {
         this.tag = tag;
+    }
+
+    public int getIsread() {
+        return isread;
+    }
+
+    public void setIsread(int isread) {
+        this.isread = isread;
     }
 
     @Override
@@ -79,6 +86,7 @@ public class ChatHistory {
                 ", chatcontent='" + chatcontent + '\'' +
                 ", chattime=" + chattime +
                 ", tag=" + tag +
+                ", isread=" + isread +
                 '}';
     }
 }

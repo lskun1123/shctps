@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+            http://www.springframework.org/schema/websocket
+            http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd">
+    <!-- websocket处理类 -->
+<!--    <bean id="myHandler" class="com.lsk.controller.MyHandler"/>-->
+
+<!--    <websocket:handlers>-->
+<!--        <websocket:mapping path="/webSocket.html" handler="myHandler"/>-->
+<!--        <websocket:handshake-interceptors>-->
+<!--            <bean class="com.lsk.controller.socket.WebSocketInterceptor"/>-->
+<!--        </websocket:handshake-interceptors>-->
+<!--    </websocket:handlers>-->
+
+<!--    &lt;!&ndash;  注册 sockJS &ndash;&gt;-->
+<!--    <websocket:handlers>-->
+<!--        <websocket:mapping path="/webSocket/sockjs.html" handler="myHandler"/>-->
+<!--        <websocket:sockjs/>-->
+<!--    </websocket:handlers>-->
+</beans>

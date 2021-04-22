@@ -1,5 +1,6 @@
 package com.lsk.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Feedback {
@@ -7,9 +8,11 @@ public class Feedback {
 
     private Integer uid;
 
-    private Date feedbacktime;
+    private Timestamp feedbacktime;
 
     private String msg;
+
+    private String feedimg;
 
     public Integer getFid() {
         return fid;
@@ -27,11 +30,11 @@ public class Feedback {
         this.uid = uid;
     }
 
-    public Date getFeedbacktime() {
+    public Timestamp getFeedbacktime() {
         return feedbacktime;
     }
 
-    public void setFeedbacktime(Date feedbacktime) {
+    public void setFeedbacktime(Timestamp feedbacktime) {
         this.feedbacktime = feedbacktime;
     }
 
@@ -41,5 +44,24 @@ public class Feedback {
 
     public void setMsg(String msg) {
         this.msg = msg == null ? null : msg.trim();
+    }
+
+    public String getFeedimg() {
+        return feedimg;
+    }
+
+    public void setFeedimg(String feedimg) {
+        this.feedimg = feedimg == null ? null : feedimg.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "fid=" + fid +
+                ", uid=" + uid +
+                ", feedbacktime=" + feedbacktime +
+                ", msg='" + msg + '\'' +
+                ", feedimg='" + feedimg + '\'' +
+                '}';
     }
 }

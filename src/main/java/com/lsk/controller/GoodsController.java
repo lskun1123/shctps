@@ -18,6 +18,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -67,8 +68,8 @@ public class GoodsController {
         if(quality != null){
             goods.setQuality(quality);
         }
-        goods.setIssuedate(new Date());
-        goods.setDuedate(Base.randomAfterDate());
+        goods.setIssuedate(new Timestamp(System.currentTimeMillis()));
+        goods.setDuedate(new Timestamp(Base.randomAfterDate().getTime()));
         //String goodsImgs = "";
 //        for(String multipartFile : goodsImg){
 //            if(!multipartFile.isEmpty()){
@@ -145,11 +146,7 @@ public class GoodsController {
     @RequestMapping("/getGoodsList")
     @ResponseBody
     public Result<List<Goods>> getGoodsList(String pageNumber){
-        List<Goods> list = goodsService.getAbstractGoodsInfo(pageNumber);
-        Result<List<Goods>> result = new Result<>();
-        result.setData(list);
-        result.setCode(list != null?Result.SUCCESS:Result.ERROR);
-        return result;
+        return getListResult(pageNumber);
     }
 
     /**
@@ -182,17 +179,14 @@ public class GoodsController {
     /**
      * 获取用户发布历史
      * 2021-04-11 15:46:26
-     * @param session
-     * @param pageNumber
+     * @param uid
      * @return
      */
     @RequestMapping("/getReleaseHistory")
     @ResponseBody
-    public Result<List<Goods>> getReleaseHistory(HttpSession session,String pageNumber){
+    public Result<List<Goods>> getReleaseHistory(String uid){
 
-        user = (User) session.getAttribute("CUR_USER");
-        List<Goods> list = new ArrayList<>();
-        list = goodsService.getReleaseHistory(user.getUid(),pageNumber);
+        List<Goods> list = goodsService.getReleaseHistory(Integer.parseInt(uid));
         Result<List<Goods>> result = new Result<>();
         result.setData(list);
         result.setCode(list != null?Result.SUCCESS:Result.ERROR);
@@ -220,16 +214,25 @@ public class GoodsController {
 
     /**
      * 物品搜索功能
-     * 2021-04-11 20:18:12
+     * @date 2021-04-11 20:18:12
      * @param key
      * @return
      */
     @RequestMapping("/searchGoods")
     @ResponseBody
-    public Result<HashMap<Integer,Goods>> searchGoods(String key,String pageNumber){
-        HashMap<Integer,Goods> hashMap = goodsService.searchByKey(key,pageNumber);
-        Result<HashMap<Integer,Goods>> result = new Result<>();
-        result.setData(hashMap);
+    public Result<List<Goods>> searchGoods(String key,String pageNumber,String orderBy){
+        HashMap<Integer,Goods> hashMap = null;
+        if("0".equals(orderBy)){
+            hashMap = goodsService.searchByKey(key,pageNumber);
+        }else{
+            hashMap = goodsService.searchByKeyOrderByPrice(key,pageNumber);
+        }
+        List<Goods> list = new ArrayList<>();
+        hashMap.forEach((key2,value) -> {
+            list.add(value);
+        });
+        Result<List<Goods>> result = new Result<>();
+        result.setData(list);
         result.setCode(hashMap != null?Result.SUCCESS:Result.ERROR);
         return result;
     }
@@ -252,6 +255,13 @@ public class GoodsController {
         return isSuccess;
     }
 
+    /**
+     *
+     * @param session
+     * @param pageNumber
+     * @date 2021-04-16 11:06:27
+     * @return
+     */
     @RequestMapping("/getGoodsCollection")
     @ResponseBody
     public Result<List<Goods>> getGoodsCollection(HttpSession session,String pageNumber){
@@ -264,4 +274,43 @@ public class GoodsController {
         return listResult;
     }
 
+    @RequestMapping("/chat.html")
+    public String chat(){
+        return "chat";
+    }
+
+    /**
+     * 分类获取商品（分页）
+     * @param category
+     * @param pageNumber
+     * @return
+     * @date 2021-04-19 10:41:37
+     */
+    @RequestMapping("/getGoodsByCategory")
+    @ResponseBody
+    public Result<List<Goods>> getGoodsByCategory(String category,String pageNumber){
+        if("0".equals(category)){
+            return getListResult(pageNumber);
+        }else{
+            List<Goods> list = goodsService.getGoodsByCategory(Integer.parseInt(category),Integer.parseInt(pageNumber));
+            Result<List<Goods>> result = new Result<>();
+            result.setData(list);
+            result.setCode(list != null?Result.SUCCESS:Result.ERROR);
+            return result;
+        }
+    }
+
+    /**
+     * 获取商品摘要列表
+     * @param pageNumber
+     * @return
+     * @date 2021-04-19 16:02:47
+     */
+    private Result<List<Goods>> getListResult(String pageNumber) {
+        List<Goods> list = goodsService.getAbstractGoodsInfo(pageNumber);
+        Result<List<Goods>> result = new Result<>();
+        result.setData(list);
+        result.setCode(list != null?Result.SUCCESS:Result.ERROR);
+        return result;
+    }
 }

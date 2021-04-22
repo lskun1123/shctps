@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../js/jquery-1.11.2.js"></script>
+    <script src="../layui/layui.all.js"></script>
+</head>
+<body>
+<h2>Hello World!</h2>
+<script>
+
+    getBuyerAndSeller();
+
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return unescape(r[2]); return null;
+    }
+
+    function getBuyerAndSeller() {
+        $.getJSON("/shctps/user/getBuyer",function (data) {
+            var userInfo = data.data;
+            console.log(userInfo);
+            $("#from").val(userInfo.uid);
+            $("#to").val(GetQueryString("to"));
+        })
+    }
+    var websocket;
+    function createSession(){
+        if ('WebSocket' in window) {
+            console.log("此浏览器支持websocket");
+            websocket = new WebSocket("ws://127.0.0.1:8080/shctps/ws/server/"+$("input[type='text'][placeholder='from']").val());//传参数的方式
+            $("span").html("链接成功!")
+        } else if ('MozWebSocket' in window) {
+            alert("此浏览器只支持MozWebSocket");
+        } else {
+            alert("此浏览器只支持SockJS");
+        }
+        websocket.onopen = function(evnt) {
+            sendMessage(0);
+            showMessage(event.data);
+        };
+
+        //实时显示推送的消息
+        websocket.onmessage = function(evnt) {
+            showMessage(evnt.data)
+        };
+
+        websocket.onerror = function(evnt) {
+            $("span").html("遇到了错误")
+        };
+
+        websocket.onclose = function(evnt) {
+            $("span").html("与服务器断开了链接!")
+        }
+
+
+    }
+
+    $(function(){
+        $("button[type='button']").bind('click', function() {
+            sendMessage(1);
+        });
+    })
+
+
+    function sendMessage(type) {
+        var message = {};
+        message.accepter = $("input[type='text'][placeholder='to']").val();
+        message.chatcontent=$("textarea[name='input']").val();
+        message.sayer = $("input[type='text'][placeholder='from']").val();
+        message.tag=0;
+        if (websocket != null) {
+            websocket.send(JSON.stringify(message));
+            showMessage(JSON.stringify(message))
+        } else {
+            alert('未与服务器链接.');
+        }
+    }
+
+    function getCTime(){
+        var date = new Date();
+        return date.getFullYear() + "-" + (date.getMonth()+1) + "-" + (date.getDay()+1) + " " + (date.getHours()) + ":" + (date.getMinutes()) + ":" + (date.getSeconds());
+    }
+
+    /**
+     *  type 0为系统消息   1位普通消息
+     * @param data
+     */
+    function showMessage(data){
+        data = JSON.parse(data);
+        // if(data.type==0){
+        //     $("textarea[name='show']").append(data.chatcontent+"\n");
+        // } else if(data.type==1){
+            $("textarea[name='show']").append(data.sayer + "\t\t\t"+data.chattime+"\n" + data.chatcontent+"\n");
+        //}
+    }
+</script>
+
+<input type="text" value="" placeholder="from" id="from"><input type="text" value="" placeholder="to" id="to" > <span></span>
+<input type="button" value="创建连接" onclick="createSession()">
+<form class="layui-form" action="">
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">显示</label>
+        <div class="layui-input-block">
+            <textarea name="show" placeholder="请输入内容" class="layui-textarea" style="height: 240px;"></textarea>
+        </div>
+    </div>
+    <!--<div class="layui-form-item layui-form-text">
+      <label class="layui-form-label">编辑器</label>
+      <div class="layui-input-block">
+        <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
+      </div>
+    </div>-->
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">输入</label>
+        <div class="layui-input-block">
+            <textarea name="input" placeholder="请输入内容" class="layui-textarea" style="height: 120px;"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1">发送</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>

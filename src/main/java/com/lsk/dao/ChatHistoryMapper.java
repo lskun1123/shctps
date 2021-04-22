@@ -3,10 +3,9 @@ package com.lsk.dao;
 import com.lsk.entity.ChatHistory;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * @author LSKun
+ * @date 2021-04-15 15:40:23
  */
 @Repository
 public interface ChatHistoryMapper {

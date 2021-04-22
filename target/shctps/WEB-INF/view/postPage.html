@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>帖子详情</title>
+    <script src="/shctps/js/jquery-1.11.2.js"></script>
+    <style>
+        .headImg{
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+        }
+        .reviewerImg{
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="postInfo">
+
+    </div>
+    <div id="comments">
+
+    </div>
+    <input id="review" type="text" placeholder="留下你的评论"/>
+    <input type="button" value="评论" onclick="commentToPost()"/>
+</body>
+<script>
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return unescape(r[2]); return null;
+    }
+    var postid = GetQueryString("postid");
+    function getPostInfo() {
+        $.getJSON("/shctps/post/getPostInfo",{
+            "postid":postid
+        },function (data) {
+            var postinfo = $("#postInfo");
+            var poster=data.data.poster;
+            $.getJSON("/shctps/user/getUser",{
+                "pid":poster
+            },function (res) {
+                var headimg = $("<img class='headImg' src='" +
+                    res.data.img +
+                    "'>");
+                var nickname = $("<P></P>");
+                nickname.text(res.data.nickname);
+                postinfo.append(headimg);
+                postinfo.append(nickname);
+            });
+            var time = $("<p></p>");
+            time.text("发表于： " + data.data.posttime);
+            var content = $("<p></p>");
+            content.text(data.data.postcontent);
+            postinfo.append(time);
+            postinfo.append(content);
+        })
+    }
+    getPostInfo();
+    getReview(1);
+
+    //获取评论
+    function getReview(pageNumber) {
+        var review = $("#comments");
+        $.getJSON("/shctps/post/getReview",{
+            "postid":postid,
+            "pageNumber":pageNumber
+        },function (data) {
+            $.each(data.data,function (index, data) {
+                //console.log(data);
+                var view = $("<div id='"+ data.rid + "'></div>");
+                review.append(view);
+                getUser(data.reviewer,data.rid);
+                var content = $("<p></p>");
+                content.append(data.reviewcontent);
+                view.append(content);
+                //添加评论
+                var button = $("<button onclick='commentToReviewer(obj)'>评论</button>");
+                view.append(button);
+            })
+        })
+    }
+
+    //发表评论
+    function commentToPost() {
+        var content = $("#review");
+        console.log("val:" + content.val());
+        //console.log("text:" + content.text());
+        $.getJSON("/shctps/post/commentToPost",{
+            "reviewContent":content.val(),
+            "postid":postid
+        },function (data) {
+            content.val("");
+            $("#comments").empty();
+            getReview(1);
+        })
+    }
+
+    //发表对评论的评论
+    function commentToReviewer(obj) {
+        //var tmp = obj;
+        var view = $(obj).parent();
+        var content = $("<input type='text'/>");
+        view.append(content);
+    }
+
+    function getUser(pid,rid) {
+        var view = $("#"+rid);
+        $.getJSON("/shctps/user/getUser",{
+            "pid":pid
+        },function (msg) {
+            console.log("评论者信息：" + msg.data);
+            var img = $("<img class='reviewerImg' src='"+ msg.data.img +"'/>");
+            var username = $("<p></p>");
+            username.append("发布人： " + msg.data.nickname);
+            view.append(img);
+            view.append(username);
+        });
+    }
+</script>
+</html>

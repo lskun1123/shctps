@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -12,6 +13,8 @@ import org.apache.commons.httpclient.HttpStatus;//此类需要添加maven依赖�
 
 
 public class HttpUtil {
+
+
 
     public static String doGet(String urlPath, HashMap<String, Object> params)
             throws Exception {

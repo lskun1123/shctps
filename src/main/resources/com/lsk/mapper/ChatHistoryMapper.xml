@@ -6,8 +6,9 @@
     <result column="sayer" jdbcType="INTEGER" property="sayer" />
     <result column="accepter" jdbcType="INTEGER" property="accepter" />
     <result column="chatcontent" jdbcType="VARCHAR" property="chatcontent" />
-    <result column="chattime" jdbcType="DATE" property="chattime" />
+    <result column="chattime" jdbcType="TIMESTAMP" property="chattime" />
     <result column="tag" jdbcType="TINYINT" property="tag" />
+    <result column="isread" jdbcType="TINYINT" property="isread" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -39,7 +40,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    cid, sayer, accepter, chatcontent, chattime, tag
+    cid, sayer, accepter, chatcontent, chattime, tag, isread
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -53,11 +54,11 @@
   </delete>
   <insert id="insert" parameterType="com.lsk.entity.ChatHistory">
     insert into chathistory (cid, sayer, accepter, 
-      chatcontent, chattime, tag
-      )
+      chatcontent, chattime, tag, 
+      isread)
     values (#{cid,jdbcType=BIGINT}, #{sayer,jdbcType=INTEGER}, #{accepter,jdbcType=INTEGER}, 
-      #{chatcontent,jdbcType=VARCHAR}, #{chattime,jdbcType=DATE}, #{tag,jdbcType=TINYINT}
-      )
+      #{chatcontent,jdbcType=VARCHAR}, #{chattime,jdbcType=TIMESTAMP}, #{tag,jdbcType=TINYINT}, 
+      #{isread,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.lsk.entity.ChatHistory">
     insert into chathistory
@@ -80,6 +81,9 @@
       <if test="tag != null">
         tag,
       </if>
+      <if test="isread != null">
+        isread,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="cid != null">
@@ -95,10 +99,13 @@
         #{chatcontent,jdbcType=VARCHAR},
       </if>
       <if test="chattime != null">
-        #{chattime,jdbcType=DATE},
+        #{chattime,jdbcType=TIMESTAMP},
       </if>
       <if test="tag != null">
         #{tag,jdbcType=TINYINT},
+      </if>
+      <if test="isread != null">
+        #{isread,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -115,10 +122,13 @@
         chatcontent = #{chatcontent,jdbcType=VARCHAR},
       </if>
       <if test="chattime != null">
-        chattime = #{chattime,jdbcType=DATE},
+        chattime = #{chattime,jdbcType=TIMESTAMP},
       </if>
       <if test="tag != null">
         tag = #{tag,jdbcType=TINYINT},
+      </if>
+      <if test="isread != null">
+        isread = #{isread,jdbcType=TINYINT},
       </if>
     </set>
     where cid = #{cid,jdbcType=BIGINT}
@@ -128,8 +138,9 @@
     set sayer = #{sayer,jdbcType=INTEGER},
       accepter = #{accepter,jdbcType=INTEGER},
       chatcontent = #{chatcontent,jdbcType=VARCHAR},
-      chattime = #{chattime,jdbcType=DATE},
-      tag = #{tag,jdbcType=TINYINT}
+      chattime = #{chattime,jdbcType=TIMESTAMP},
+      tag = #{tag,jdbcType=TINYINT},
+      isread = #{isread,jdbcType=TINYINT}
     where cid = #{cid,jdbcType=BIGINT}
   </update>
 </mapper>

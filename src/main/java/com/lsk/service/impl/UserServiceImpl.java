@@ -1,6 +1,8 @@
 package com.lsk.service.impl;
 
+import com.lsk.dao.FeedbackMapper;
 import com.lsk.dao.UserMapper;
+import com.lsk.entity.Feedback;
 import com.lsk.entity.User;
 import com.lsk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    FeedbackMapper feedbackMapper;
 
     @Override
     public Boolean addUser(User user) {
@@ -40,5 +45,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean editUser(User user) {
         return userMapper.updateByPrimaryKey(user) > 0;
+    }
+
+    @Override
+    public boolean addFeedback(Feedback feedback) {
+        return feedbackMapper.insertSelective(feedback) > 0;
+    }
+
+    @Override
+    public User selectUserByUserID(String pid) {
+        return userMapper.selectByPrimaryKey(Integer.parseInt(pid));
     }
 }

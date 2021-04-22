@@ -1,14 +1,10 @@
 package com.lsk.dao;
 
 import com.lsk.entity.Order;
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import java.sql.Timestamp;
 
-/**
- * @author LSKun
- */
-@Repository
 public interface OrderMapper {
     int deleteByPrimaryKey(Long oid);
 
@@ -21,4 +17,8 @@ public interface OrderMapper {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+    int confirmOrder(@Param("oid")int oid, @Param("dealtime") Timestamp dealtime);
+
+    int updateStateTo2(int oid);
 }
