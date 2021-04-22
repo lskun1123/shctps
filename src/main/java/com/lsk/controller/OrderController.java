@@ -92,6 +92,7 @@ public class OrderController {
     @RequestMapping("cancelOrder")
     @ResponseBody
     public Boolean cancelOrder(String gid,String oid){
+        System.out.println("gid+oid : " + gid +"  "+ oid);
         Boolean isSuccess = orderService.cancelOrder(Integer.parseInt(gid),Integer.parseInt(oid));
         return isSuccess;
     }
